@@ -1,0 +1,235 @@
+{
+  "navbar": {
+    "home": "Accueil",
+    "about": "À propos",
+    "team": "L'équipe",
+    "contact": "Coordonnées",
+    "appointment": "Rendez-vous",
+    "login": "Connexion",
+    "register": "Inscription",
+    "myAccount": "Mon compte",
+    "logout": "Déconnexion",
+    "profile": "Mon profil",
+    "language": "Langue"
+  },
+  "hero": {
+    "title": "La croissance prévisible commence ici",
+    "subtitle": "FM Compta Consulting vous accompagne dans la gestion de votre comptabilité pour une croissance durable et maîtrisée de votre entreprise.",
+    "cta": "Prendre rendez-vous"
+  },
+  "about": {
+    "title": "À propos de nous",
+    "description": "FM Compta Consulting est votre partenaire de confiance en matière de comptabilité et de conseil financier. Nous transformons vos données en résultats commerciaux concrets.",
+    "services": {
+      "accounting": {
+        "title": "Comptabilité Générale",
+        "description": "Gestion complète de votre comptabilité, de la saisie des factures aux déclarations fiscales, en passant par le bilan annuel."
+      },
+      "tax": {
+        "title": "Conseil Fiscal",
+        "description": "Optimisation fiscale légale, planification stratégique et accompagnement dans vos déclarations d'impôts."
+      },
+      "social": {
+        "title": "Gestion Sociale",
+        "description": "Administration des salaires, déclarations sociales et gestion des obligations légales liées au personnel."
+      },
+      "creation": {
+        "title": "Création d'Entreprise",
+        "description": "Accompagnement dans les démarches de création d'entreprise, choix de la structure juridique et business plan."
+      }
+    }
+  },
+  "team": {
+    "title": "Notre équipe",
+    "members": {
+      "felicia": {
+        "name": "Gérante",
+        "position": "Expert-comptable certifiée",
+        "description": "Expert-comptable certifiée",
+        "email": "Envoyer un email"
+      },
+      "liudmila": {
+        "name": "Employée",
+        "position": "Gestionnaire de dossiers",
+        "description": "Aide comptable",
+        "email": "Envoyer un email"
+      },
+      "aliona": {
+        "name": "Employée",
+        "position": "Gestionnaire de dossiers",
+        "description": "Aide comptable",
+        "email": "Envoyer un email"
+      },
+      "maria": {
+        "name": "Employée",
+        "position": "Administration",
+        "description": "Administration",
+        "email": "Envoyer un email"
+      }
+    }
+  },
+  "contact": {
+    "title": "Coordonnées",
+    "address": "Adresse",
+    "phone": "Téléphone",
+    "email": "Email",
+    "contactForm": {
+      "name": "Nom",
+      "email": "Email",
+      "subject": "Sujet",
+      "message": "Message",
+      "submit": "Envoyer"
+    }
+  },
+  "appointment": {
+    "title": "Prendre rendez-vous",
+    "subtitle": "Réservez une consultation avec notre équipe",
+    "new": "Nouveau rendez-vous",
+    "edit": "Modifier le rendez-vous",
+    "date": "Date",
+    "time": "Heure",
+    "service": "Service",
+    "message": "Message (optionnel)",
+    "submit": "Confirmer",
+    "success": "Votre rendez-vous a été confirmé",
+    "error": "Une erreur est survenue, veuillez réessayer",
+    "login": "Veuillez vous connecter pour prendre rendez-vous",
+    "myAppointments": "Mes rendez-vous",
+    "cancel": "Annuler",
+    "modify": "Modifier",
+    "noAppointments": "Vous n'avez pas de rendez-vous programmés",
+    "loading": "Chargement des rendez-vous...",
+    "confirmCancel": "Êtes-vous sûr de vouloir annuler ce rendez-vous ?",
+    "cancelTitle": "Annulation du rendez-vous",
+    "confirmDelete": "Confirmer",
+    "reason": "Motif du rendez-vous",
+    "form": {
+      "date": "Date",
+      "time": "Heure",
+      "selectTime": "Sélectionnez une heure",
+      "reason": "Motif du rendez-vous",
+      "reasonPlaceholder": "Veuillez préciser le motif de votre rendez-vous",
+      "submit": "Confirmer le rendez-vous",
+      "update": "Mettre à jour le rendez-vous",
+      "cancel": "Retour"
+    },
+    "status": {
+      "confirmed": "Confirmé",
+      "pending": "En attente",
+      "cancelled": "Annulé"
+    }
+  },
+  "confirmations": {
+    "logout": {
+      "title": "Confirmation de déconnexion",
+      "message": "Êtes-vous sûr de vouloir vous déconnecter ?",
+      "confirm": "Déconnexion",
+      "cancel": "Annuler"
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Connexion",
+      "email": "Email",
+      "password": "Mot de passe",
+      "submit": "Se connecter",
+      "forgotPassword": "Mot de passe oublié ?",
+      "noAccount": "Pas encore de compte ?",
+      "register": "S'inscrire",
+      "invalidCredentials": "Identifiants incorrects. Veuillez réessayer."
+    },
+    "register": {
+      "title": "Inscription",
+      "name": "Nom complet",
+      "email": "Email",
+      "password": "Mot de passe",
+      "confirmPassword": "Confirmer le mot de passe",
+      "submit": "S'inscrire",
+      "hasAccount": "Déjà un compte ?",
+      "login": "Se connecter"
+    },
+    "error": "Erreur d'authentification",
+    "errorHelp": "Veuillez réessayer ou contacter notre support si le problème persiste.",
+    "errors": {
+      "invalidCredentials": "Identifiants incorrects. Veuillez réessayer.",
+      "accessDenied": "Accès refusé. Vous n'avez pas les droits nécessaires.",
+      "callbackError": "Erreur lors de l'authentification. Veuillez réessayer.",
+      "oauthError": "Erreur lors de l'authentification avec le fournisseur externe.",
+      "accountNotLinked": "Ce compte n'est pas lié à votre profil.",
+      "emailSignin": "Erreur lors de l'envoi du lien de connexion par email.",
+      "credentialsSignup": "Erreur lors de l'inscription. Veuillez réessayer.",
+      "sessionRequired": "Vous devez être connecté pour accéder à cette page.",
+      "default": "Une erreur est survenue lors de l'authentification."
+    }
+  },
+  "values": {
+    "title": "Nos Valeurs",
+    "expertise": {
+      "title": "Expertise",
+      "description": "Une équipe qualifiée et expérimentée pour des solutions adaptées à vos besoins."
+    },
+    "proximity": {
+      "title": "Proximité",
+      "description": "Un accompagnement personnalisé et une disponibilité constante pour nos clients."
+    },
+    "innovation": {
+      "title": "Innovation",
+      "description": "Utilisation des dernières technologies pour une gestion comptable moderne et efficace."
+    }
+  },
+  "profile": {
+    "title": "Mon Profil",
+    "welcome": "Bienvenue",
+    "welcomeMessage": "Bienvenue sur votre espace personnel. Ici, vous pouvez gérer vos rendez-vous et accéder à nos services.",
+    "manageAppointments": "Gérer mes rendez-vous",
+    "newAppointment": "Nouveau rendez-vous",
+    "newAppointmentDesc": "Prenez un nouveau rendez-vous avec notre équipe.",
+    "viewAppointments": "Voir mes rendez-vous",
+    "viewAppointmentsDesc": "Consultez et gérez vos rendez-vous existants."
+  },
+  "admin": {
+    "title": "Administration",
+    "calendar": "Calendrier des rendez-vous",
+    "allAppointments": "Tous les rendez-vous",
+    "client": "Client",
+    "statusLabel": "Statut",
+    "status": {
+      "confirmed": "Confirmé",
+      "cancelled": "Annulé",
+      "pending": "En attente"
+    },
+    "actions": "Actions",
+    "confirm": "Confirmer",
+    "cancel": "Annuler",
+    "confirmTitle": "Confirmation du rendez-vous",
+    "cancelTitle": "Annulation du rendez-vous",
+    "confirmMessage": "Êtes-vous sûr de vouloir confirmer ce rendez-vous ?",
+    "cancelMessage": "Êtes-vous sûr de vouloir annuler ce rendez-vous ?",
+    "noAppointments": "Aucun rendez-vous trouvé",
+    "accessDenied": "Accès refusé. Vous devez être administrateur pour accéder à cette page.",
+    "backToDashboard": "Retour au tableau de bord"
+  },
+  "common": {
+    "backToHome": "Retour à l'accueil",
+    "back": "Retour",
+    "previous": "Précédent",
+    "next": "Suivant"
+  },
+  "footer": {
+    "copyright": "© 2023 FM Compta Consulting. Tous droits réservés.",
+    "terms": "Conditions d'utilisation",
+    "privacy": "Politique de confidentialité"
+  },
+  "error": {
+    "404": {
+      "title": "Page non trouvée",
+      "message": "Désolé, la page que vous recherchez n'existe pas.",
+      "back": "Retour à l'accueil"
+    },
+    "500": {
+      "title": "Erreur serveur",
+      "message": "Désolé, une erreur s'est produite sur le serveur.",
+      "back": "Retour à l'accueil"
+    }
+  }
+}

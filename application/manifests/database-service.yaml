@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: database
+  namespace: default
+spec:
+  selector:
+    app: fm-compta-consulting-database
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017

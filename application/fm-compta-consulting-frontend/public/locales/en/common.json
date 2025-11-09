@@ -1,0 +1,264 @@
+{
+  "navbar": {
+    "home": "Home",
+    "about": "About",
+    "team": "Team",
+    "contact": "Contact",
+    "appointment": "Appointment",
+    "login": "Login",
+    "register": "Register",
+    "myAccount": "My Account",
+    "logout": "Logout",
+    "profile": "My Profile",
+    "language": "Language"
+  },
+  "hero": {
+    "title": "Predictable growth starts here",
+    "subtitle": "FM Compta Consulting accompanies you in managing your accounting for sustainable and controlled growth of your business.",
+    "cta": "Make an appointment"
+  },
+  "about": {
+    "title": "About us",
+    "description": "FM Compta Consulting is your trusted partner in accounting and financial consulting. We transform your data into concrete business results.",
+    "services": {
+      "accounting": {
+        "title": "General Accounting",
+        "description": "Complete management of your accounting, from invoice entry to tax declarations, including the annual balance sheet."
+      },
+      "tax": {
+        "title": "Tax Consulting",
+        "description": "Legal tax optimization, strategic planning and support in your tax declarations."
+      },
+      "social": {
+        "title": "Social Management",
+        "description": "Administration of salaries, social declarations and management of legal obligations related to personnel."
+      },
+      "creation": {
+        "title": "Business Creation",
+        "description": "Support in business creation procedures, choice of legal structure and business plan."
+      }
+    }
+  },
+  "team": {
+    "title": "Our team",
+    "members": {
+      "felicia": {
+        "name": "Manager",
+        "position": "Certified accountant",
+        "description": "Certified accountant",
+        "email": "Send an email"
+      },
+      "liudmila": {
+        "name": "Employee",
+        "position": "File manager",
+        "description": "Accounting assistant",
+        "email": "Send an email"
+      },
+      "aliona": {
+        "name": "Employee",
+        "position": "File manager",
+        "description": "Accounting assistant",
+        "email": "Send an email"
+      },
+      "maria": {
+        "name": "Employee",
+        "position": "Administration",
+        "description": "Administration",
+        "email": "Send an email"
+      }
+    }
+  },
+  "contact": {
+    "title": "Contact",
+    "address": "Address",
+    "phone": "Phone",
+    "email": "Email",
+    "contactForm": {
+      "name": "Name",
+      "email": "Email",
+      "subject": "Subject",
+      "message": "Message",
+      "submit": "Send"
+    }
+  },
+  "appointment": {
+    "title": "Make an appointment",
+    "subtitle": "Book a consultation with our team",
+    "new": "New appointment",
+    "edit": "Edit appointment",
+    "date": "Date",
+    "time": "Time",
+    "service": "Service",
+    "message": "Message (optional)",
+    "submit": "Confirm",
+    "success": "Your appointment has been confirmed",
+    "error": "An error occurred, please try again",
+    "login": "Please log in to make an appointment",
+    "myAppointments": "My appointments",
+    "cancel": "Cancel",
+    "modify": "Modify",
+    "noAppointments": "You have no scheduled appointments",
+    "loading": "Loading appointments...",
+    "confirmCancel": "Cancel this appointment?",
+    "cancelTitle": "Cancel Appointment",
+    "confirmDelete": "Yes",
+    "reason": "Reason for appointment",
+    "form": {
+      "date": "Date",
+      "time": "Time",
+      "selectTime": "Select a time",
+      "reason": "Reason for appointment",
+      "reasonPlaceholder": "Please specify the reason for your appointment",
+      "submit": "Confirm appointment",
+      "update": "Update appointment",
+      "cancel": "Cancel"
+    },
+    "status": {
+      "confirmed": "Confirmed",
+      "pending": "Pending"
+    }
+  },
+  "confirmations": {
+    "logout": {
+      "title": "Logout Confirmation",
+      "message": "Are you sure you want to logout?",
+      "confirm": "Logout",
+      "cancel": "Cancel"
+    }
+  },
+  "profile": {
+    "title": "My Profile",
+    "welcome": "Welcome",
+    "welcomeMessage": "Welcome to your personal space. Here, you can manage your appointments and access our services.",
+    "manageAppointments": "Manage my appointments",
+    "newAppointment": "New appointment",
+    "newAppointmentDesc": "Schedule a new appointment with our team.",
+    "viewAppointments": "View my appointments",
+    "viewAppointmentsDesc": "View and manage your existing appointments."
+  },
+  "admin": {
+    "title": "Administration",
+    "calendar": "Appointment Calendar",
+    "allAppointments": "All Appointments",
+    "client": "Client",
+    "statusLabel": "Status",
+    "status": {
+      "confirmed": "Confirmed",
+      "cancelled": "Cancelled",
+      "pending": "Pending"
+    },
+    "actions": "Actions",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "confirmTitle": "Appointment Confirmation",
+    "cancelTitle": "Appointment Cancellation",
+    "confirmMessage": "Are you sure you want to confirm this appointment?",
+    "cancelMessage": "Are you sure you want to cancel this appointment?",
+    "noAppointments": "No appointments found",
+    "accessDenied": "Access denied. You must be an administrator to access this page.",
+    "backToDashboard": "Back to Dashboard"
+  },
+  "auth": {
+    "login": {
+      "title": "Login",
+      "email": "Email",
+      "password": "Password",
+      "submit": "Login",
+      "forgotPassword": "Forgot password?",
+      "noAccount": "Don't have an account yet?",
+      "register": "Register",
+      "invalidCredentials": "Invalid credentials. Please try again."
+    },
+    "register": {
+      "title": "Register",
+      "name": "Full name",
+      "email": "Email",
+      "password": "Password",
+      "confirmPassword": "Confirm password",
+      "submit": "Register",
+      "hasAccount": "Already have an account?",
+      "login": "Login"
+    },
+    "logout": {
+      "title": "Logout Confirmation",
+      "message": "Are you sure you want to logout?",
+      "confirm": "Logout",
+      "cancel": "Cancel"
+    }
+  },
+  "values": {
+    "title": "Our Values",
+    "expertise": {
+      "title": "Expertise",
+      "description": "A qualified and experienced team for solutions adapted to your needs."
+    },
+    "proximity": {
+      "title": "Proximity",
+      "description": "Personalized support and constant availability for our clients."
+    },
+    "innovation": {
+      "title": "Innovation",
+      "description": "Use of the latest technologies for modern and efficient accounting management."
+    }
+  },
+  "confirmDialog": {
+    "logout": {
+      "title": "Logout Confirmation",
+      "message": "Are you sure you want to logout?",
+      "confirm": "Logout",
+      "cancel": "Cancel"
+    }
+  },
+  "userProfile": {
+    "title": "My Profile",
+    "welcome": "Welcome",
+    "welcomeMessage": "Welcome to your personal space. Here, you can manage your appointments and access our services.",
+    "manageAppointments": "Manage my appointments",
+    "newAppointment": "New appointment",
+    "newAppointmentDesc": "Schedule a new appointment with our team.",
+    "viewAppointments": "View my appointments",
+    "viewAppointmentsDesc": "View and manage your existing appointments."
+  },
+  "admin": {
+    "title": "Administration",
+    "calendar": "Appointment Calendar",
+    "allAppointments": "All Appointments",
+    "client": "Client",
+    "statusLabel": "Status",
+    "status": {
+      "confirmed": "Confirmed",
+      "cancelled": "Cancelled",
+      "pending": "Pending"
+    },
+    "actions": "Actions",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "confirmTitle": "Appointment Confirmation",
+    "cancelTitle": "Appointment Cancellation",
+    "confirmMessage": "Are you sure you want to confirm this appointment?",
+    "cancelMessage": "Are you sure you want to cancel this appointment?",
+    "noAppointments": "No appointments found",
+    "accessDenied": "Access denied. You must be an administrator to access this page.",
+    "backToDashboard": "Back to Dashboard"
+  },
+  "common": {
+    "backToHome": "Back to Home"
+  },
+  "footer": {
+    "copyright": "© 2023 FM Compta Consulting. All rights reserved.",
+    "terms": "Terms of Use",
+    "privacy": "Privacy Policy"
+  },
+  "error": {
+    "404": {
+      "title": "Page Not Found",
+      "message": "Sorry, the page you are looking for does not exist.",
+      "back": "Back to Home"
+    },
+    "500": {
+      "title": "Server Error",
+      "message": "Sorry, an error occurred on the server.",
+      "back": "Back to Home"
+    }
+  }
+}

@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fm-compta-consulting-frontend
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fm-compta-consulting-frontend
+  template:
+    metadata:
+      labels:
+        app: fm-compta-consulting-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: ghcr.io/rolandsebastien/fm-compta-consulting-frontend:74c0a334d8ac4a66778a8874eb0369331192223f
+          ports:
+            - containerPort: 3000
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: PORT
+              value: "3000"
+            - name: NEXT_PUBLIC_API_URL
+              value: "https://fm-compta-consulting.local/api"
+            - name: BACKEND_API_URL
+              value: "http://fm-compta-consulting-backend:3001/api"
+            - name: NEXTAUTH_SECRET
+              value: "Unn5rTxkCkledz9JJ558l19g1FGjJEIkkMw/o2Y0erE="
+            - name: NEXTAUTH_URL
+              value: "https://fm-compta-consulting.local"
+            - name: NODE_TLS_REJECT_UNAUTHORIZED
+              value: "0"
+            - name: NEXTAUTH_URL_INTERNAL
+              value: "http://localhost:3000"
+            - name: MONGODB_URI
+              value: "mongodb://admin:password@database:27017/compta_db?authSource=admin"

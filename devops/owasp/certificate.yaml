@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: zap-tls
+  namespace: owasp
+spec:
+  secretName: zap-tls
+  issuerRef:
+    name: selfsigned-issuer
+    kind: ClusterIssuer
+  commonName: zap.local
+  dnsNames:
+  - zap.local

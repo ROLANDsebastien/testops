@@ -1,0 +1,234 @@
+{
+  "navbar": {
+    "home": "Acasă",
+    "about": "Despre noi",
+    "team": "Echipa",
+    "contact": "Contact",
+    "appointment": "Programare",
+    "login": "Autentificare",
+    "register": "Înregistrare",
+    "myAccount": "Contul meu",
+    "logout": "Deconectare",
+    "profile": "Profilul meu",
+    "language": "Limbă"
+  },
+  "hero": {
+    "title": "Creșterea previzibilă începe aici",
+    "subtitle": "FM Compta Consulting vă însoțește în gestionarea contabilității pentru o creștere durabilă și controlată a afacerii dumneavoastră.",
+    "cta": "Programează o întâlnire"
+  },
+  "about": {
+    "title": "Despre noi",
+    "description": "FM Compta Consulting este partenerul dumneavoastră de încredere în domeniul contabilității și consultanței financiare. Transformăm datele dumneavoastră în rezultate comerciale concrete.",
+    "services": {
+      "accounting": {
+        "title": "Contabilitate Generală",
+        "description": "Gestionarea completă a contabilității dumneavoastră, de la introducerea facturilor la declarațiile fiscale, inclusiv bilanțul anual."
+      },
+      "tax": {
+        "title": "Consultanță Fiscală",
+        "description": "Optimizare fiscală legală, planificare strategică și asistență în declarațiile dumneavoastră fiscale."
+      },
+      "social": {
+        "title": "Gestiune Socială",
+        "description": "Administrarea salariilor, declarații sociale și gestionarea obligațiilor legale legate de personal."
+      },
+      "creation": {
+        "title": "Înființare de Întreprinderi",
+        "description": "Asistență în procedurile de înființare a întreprinderilor, alegerea structurii juridice și planul de afaceri."
+      }
+    }
+  },
+  "team": {
+    "title": "Echipa noastră",
+    "members": {
+      "felicia": {
+        "name": "Manager",
+        "position": "Expert contabil certificat",
+        "description": "Expert contabil certificat",
+        "email": "Trimite un email"
+      },
+      "liudmila": {
+        "name": "Angajată",
+        "position": "Manager de dosare",
+        "description": "Asistent contabil",
+        "email": "Trimite un email"
+      },
+      "aliona": {
+        "name": "Angajată",
+        "position": "Manager de dosare",
+        "description": "Asistent contabil",
+        "email": "Trimite un email"
+      },
+      "maria": {
+        "name": "Angajată",
+        "position": "Administrație",
+        "description": "Administrație",
+        "email": "Trimite un email"
+      }
+    }
+  },
+  "contact": {
+    "title": "Contact",
+    "address": "Adresă",
+    "phone": "Telefon",
+    "email": "Email",
+    "contactForm": {
+      "name": "Nume",
+      "email": "Email",
+      "subject": "Subiect",
+      "message": "Mesaj",
+      "submit": "Trimite"
+    }
+  },
+  "appointment": {
+    "edit": "Editare programare",
+    "title": "Programează o întâlnire",
+    "subtitle": "Rezervă o consultație cu echipa noastră",
+    "new": "Programare nouă",
+    "date": "Data",
+    "time": "Ora",
+    "service": "Serviciu",
+    "message": "Mesaj (opțional)",
+    "submit": "Confirmă",
+    "success": "Programarea dumneavoastră a fost confirmată",
+    "error": "A apărut o eroare, vă rugăm să încercați din nou",
+    "login": "Vă rugăm să vă autentificați pentru a face o programare",
+    "myAppointments": "Programările mele",
+    "cancel": "Anulează",
+    "modify": "Modifică",
+    "noAppointments": "Nu aveți programări planificate",
+    "loading": "Încărcare programări...",
+    "confirmCancel": "Anulați această programare?",
+    "cancelTitle": "Anulare",
+    "confirmDelete": "Da",
+    "reason": "Motivul programării",
+    "form": {
+      "update": "Actualizare programare",
+      "cancel": "Anulare",
+      "date": "Data",
+      "time": "Ora",
+      "selectTime": "Selectați o oră",
+      "reason": "Motivul programării",
+      "reasonPlaceholder": "Vă rugăm să specificați motivul programării dumneavoastră",
+      "submit": "Confirmă programarea"
+    },
+    "status": {
+      "confirmed": "Confirmat",
+      "pending": "În așteptare"
+    }
+  },
+  "confirmations": {
+    "logout": {
+      "title": "Confirmare deconectare",
+      "message": "Sunteți sigur că doriți să vă deconectați?",
+      "confirm": "Deconectare",
+      "cancel": "Anulează"
+    }
+  },
+  "userProfile": {
+    "title": "Profilul Meu",
+    "welcome": "Bun venit",
+    "welcomeMessage": "Bun venit în spațiul dumneavoastră personal. Aici puteți gestiona programările și accesa serviciile noastre.",
+    "manageAppointments": "Gestionează programările mele",
+    "newAppointment": "Programare nouă",
+    "newAppointmentDesc": "Faceți o nouă programare cu echipa noastră.",
+    "viewAppointments": "Vezi programările mele",
+    "viewAppointmentsDesc": "Consultați și gestionați programările existente."
+  },
+  "auth": {
+    "login": {
+      "title": "Autentificare",
+      "email": "Email",
+      "password": "Parolă",
+      "submit": "Autentificare",
+      "forgotPassword": "Ați uitat parola?",
+      "noAccount": "Nu aveți încă un cont?",
+      "register": "Înregistrare",
+      "invalidCredentials": "Date de autentificare invalide. Vă rugăm să încercați din nou."
+    },
+    "logout": {
+      "title": "Confirmare deconectare",
+      "message": "Sunteți sigur că doriți să vă deconectați?",
+      "confirm": "Deconectare",
+      "cancel": "Anulează"
+    },
+    "register": {
+      "title": "Înregistrare",
+      "name": "Nume",
+      "email": "Email",
+      "password": "Parolă",
+      "confirmPassword": "Confirmă parola",
+      "submit": "Înregistrare",
+      "haveAccount": "Aveți deja un cont?",
+      "login": "Autentificare"
+    }
+  },
+  "values": {
+    "title": "Valorile noastre",
+    "expertise": {
+      "title": "Expertiză",
+      "description": "O echipă calificată și experimentată pentru soluții adaptate nevoilor dumneavoastră."
+    },
+    "proximity": {
+      "title": "Proximitate",
+      "description": "Asistență personalizată și disponibilitate constantă pentru clienții noștri."
+    },
+    "innovation": {
+      "title": "Inovație",
+      "description": "Utilizarea celor mai recente tehnologii pentru o gestionare contabilă modernă și eficientă."
+    }
+  },
+  "profile": {
+    "title": "Profilul meu",
+    "welcome": "Bun venit",
+    "welcomeMessage": "Bun venit în spațiul dumneavoastră personal. Aici, puteți gestiona programările și accesa serviciile noastre.",
+    "manageAppointments": "Gestionează programările mele",
+    "newAppointment": "Programare nouă",
+    "newAppointmentDesc": "Faceți o nouă programare cu echipa noastră.",
+    "viewAppointments": "Vezi programările mele",
+    "viewAppointmentsDesc": "Vizualizați și gestionați programările existente."
+  },
+  "admin": {
+    "title": "Administrare",
+    "calendar": "Calendar Programări",
+    "allAppointments": "Toate Programările",
+    "client": "Client",
+    "statusLabel": "Statut",
+    "status": {
+      "confirmed": "Confirmat",
+      "cancelled": "Anulat",
+      "pending": "În așteptare"
+    },
+    "actions": "Acțiuni",
+    "confirm": "Confirmă",
+    "cancel": "Anulează",
+    "confirmTitle": "Confirmare Programare",
+    "cancelTitle": "Anulare Programare",
+    "confirmMessage": "Sigur doriți să confirmați această programare?",
+    "cancelMessage": "Sigur doriți să anulați această programare?",
+    "noAppointments": "Nu s-au găsit programări",
+    "accessDenied": "Acces interzis. Trebuie să fiți administrator pentru a accesa această pagină.",
+    "backToDashboard": "Înapoi la Panou"
+  },
+  "common": {
+    "backToHome": "Înapoi la pagina principală"
+  },
+  "footer": {
+    "copyright": "© 2023 FM Compta Consulting. Toate drepturile rezervate.",
+    "terms": "Termeni și condiții",
+    "privacy": "Politica de confidențialitate"
+  },
+  "error": {
+    "404": {
+      "title": "Pagină negăsită",
+      "message": "Ne pare rău, pagina pe care o căutați nu există.",
+      "back": "Înapoi la pagina principală"
+    },
+    "500": {
+      "title": "Eroare de server",
+      "message": "Ne pare rău, a apărut o eroare pe server.",
+      "back": "Înapoi la pagina principală"
+    }
+  }
+}

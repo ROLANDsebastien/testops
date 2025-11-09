@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fm-compta-consulting-backend
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fm-compta-consulting-backend
+  template:
+    metadata:
+      labels:
+        app: fm-compta-consulting-backend
+    spec:
+      containers:
+        - name: backend
+          image: ghcr.io/rolandsebastien/fm-compta-consulting-backend:74c0a334d8ac4a66778a8874eb0369331192223f
+          ports:
+            - containerPort: 3001
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: PORT
+              value: "3001"
+            - name: MONGODB_URI
+              value: "mongodb://admin:password@database:27017/compta_db?authSource=admin"
+            - name: DATABASE_URL
+              value: "mongodb://admin:password@database:27017/compta_db?authSource=admin"
+            - name: JWT_SECRET
+              value: "votre_secret_jwt_securise_123456789"

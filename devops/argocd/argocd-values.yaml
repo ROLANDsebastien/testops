@@ -1,0 +1,15 @@
+server:
+  # The Ingress is managed by a separate yaml file, so we disable the one in the chart.
+  ingress:
+    enabled: false
+
+  # The separate Ingress resource is configured to use HTTPS to talk to the backend.
+  # We need to disable the --insecure flag on the argocd-server.
+  insecure: false
+
+  # By default, the service exposes port 80 for HTTP and 443 for HTTPS.
+  # Since the Ingress backend protocol is HTTPS, we'll make sure the service
+  # is configured for the HTTPS port.
+  service:
+    port: 443
+    targetPort: 8443

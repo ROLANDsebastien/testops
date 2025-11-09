@@ -1,0 +1,71 @@
+services:
+  # Service de base de données MongoDB
+  database:
+    build:
+      context: ./fm-compta-consulting-database
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    environment:
+      MONGO_INITDB_DATABASE: compta_db
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
+      MONGO_INITDB_AUTH_MECHANISM: SCRAM-SHA-256
+    healthcheck:
+      test: mongosh --quiet --eval 'db.runCommand("ping").ok' localhost:27017/compta_db || exit 1
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    networks:
+      - fm-compta-network
+
+  # Service backend
+  backend:
+    build:
+      context: ./fm-compta-consulting-backend
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - PORT=3001
+      - MONGODB_URI=mongodb://admin:password@database:27017/compta_db?authSource=admin
+      - DATABASE_URL=mongodb://admin:password@database:27017/compta_db?authSource=admin
+      - JWT_SECRET=votre_secret_jwt_securise_123456789
+    depends_on:
+      database:
+        condition: service_healthy
+    networks:
+      - fm-compta-network
+    restart: unless-stopped
+
+  # Service frontend
+  frontend:
+    build:
+      context: ./fm-compta-consulting-frontend
+      args:
+        NEXT_PUBLIC_API_URL_ARG: http://localhost:3001/api
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - NEXT_PUBLIC_API_URL=http://localhost:3001/api
+      - BACKEND_API_URL=http://backend:3001/api
+      - NEXTAUTH_SECRET=votre_secret_nextauth_securise_123456789
+      - NEXTAUTH_URL=http://localhost:3000
+      - MONGODB_URI=mongodb://admin:password@database:27017/compta_db?authSource=admin
+    depends_on:
+      - backend
+    networks:
+      - fm-compta-network
+    restart: unless-stopped
+
+networks:
+  fm-compta-network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
+    driver: local

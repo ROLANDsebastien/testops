@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: allure-tls
+  namespace: allure
+spec:
+  secretName: allure-tls
+  issuerRef:
+    name: selfsigned-issuer
+    kind: ClusterIssuer
+  commonName: allure.local
+  dnsNames:
+  - allure.local

@@ -1,0 +1,65 @@
+---
+apiVersion: actions.summerwind.dev/v1alpha1
+kind: RunnerDeployment
+metadata:
+  name: fm-compta-runner
+  namespace: actions-runner-system
+spec:
+  replicas: 1
+  template:
+    spec:
+      repository: rolandsebastien/devops-cluster-gitops
+      labels:
+        - self-hosted
+      hostAliases:
+        - ip: "192.168.2.108"
+          hostnames:
+            - registry.local
+            - registry-ui.local
+            - argocd.local
+            - grafana.local
+            - longhorn.local
+            - prometheus.local
+            - dashboard.local
+      containers:
+        - name: runner
+          image: summerwind/actions-runner-dind
+          env:
+            - name: DOCKER_HOST
+              value: tcp://localhost:2375
+          resources:
+            requests:
+              cpu: "1"
+              memory: "1Gi"
+            limits:
+              cpu: "2"
+              memory: "2Gi"
+        - name: dind
+          image: docker:dind
+          args:
+            - --insecure-registry=registry.local
+          securityContext:
+            privileged: true
+          resources:
+            requests:
+              cpu: "500m"
+              memory: "512Mi"
+            limits:
+              cpu: "1"
+              memory: "1Gi"
+
+---
+apiVersion: actions.summerwind.dev/v1alpha1
+kind: HorizontalRunnerAutoscaler
+metadata:
+  name: fm-compta-runner-autoscaler
+  namespace: actions-runner-system
+spec:
+  scaleTargetRef:
+    name: fm-compta-runner
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+    - type: TotalNumberOfQueuedAndInProgressWorkflowRuns
+      repositoryNames:
+        - rolandsebastien/devops-cluster-gitops

@@ -1,0 +1,17 @@
+server:
+  ingress:
+    enabled: false
+  persistentVolume:
+    enabled: false
+
+alertmanager:
+  enabled: false
+
+pushgateway:
+  enabled: false
+
+nodeExporter:
+  enabled: true
+
+kubeStateMetrics:
+  enabled: true

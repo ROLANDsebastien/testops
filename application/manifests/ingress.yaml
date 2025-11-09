@@ -1,0 +1,59 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: fm-compta-consulting-ingress
+  namespace: default
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: fm-compta-consulting.local
+      http:
+        paths:
+          - path: /api/auth/register
+            pathType: Exact
+            backend:
+              service:
+                name: fm-compta-consulting-backend
+                port:
+                  number: 3001
+          - path: /api/auth/login
+            pathType: Exact
+            backend:
+              service:
+                name: fm-compta-consulting-backend
+                port:
+                  number: 3001
+          - path: /api/auth/validate
+            pathType: Exact
+            backend:
+              service:
+                name: fm-compta-consulting-backend
+                port:
+                  number: 3001
+          - path: /api/health
+            pathType: Exact
+            backend:
+              service:
+                name: fm-compta-consulting-backend
+                port:
+                  number: 3001
+          - path: /api/auth
+            pathType: Prefix
+            backend:
+              service:
+                name: fm-compta-consulting-frontend
+                port:
+                  number: 3000
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: fm-compta-consulting-frontend
+                port:
+                  number: 3000
+  tls:
+    - hosts:
+        - fm-compta-consulting.local
+      secretName: dashboard-tls # Using the same secret for simplicity, but a dedicated one is better in production

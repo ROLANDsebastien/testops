@@ -6,11 +6,11 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/rolandsebastien/devops-cluster-gitops.git'
+    repoURL: "https://github.com/rolandsebastien/testops.git"
     path: application/manifests
     targetRevision: HEAD
   destination:
-    server: 'https://kubernetes.default.svc'
+    server: "https://kubernetes.default.svc"
     namespace: default
   syncPolicy:
     automated:

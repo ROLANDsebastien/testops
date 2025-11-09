@@ -11,7 +11,7 @@ helm repo update > /dev/null 2>&1
 helm upgrade --install actions-runner-controller actions-runner-controller/actions-runner-controller \
   --namespace "$NAMESPACE" \
   --create-namespace \
-  --set githubRepository="rolandsebastien/devops-cluster-gitops" > /dev/null
+  --set githubRepository="rolandsebastien/testops" > /dev/null
 
 echo "Waiting for GitHub Actions Runner Controller to be ready..."
 

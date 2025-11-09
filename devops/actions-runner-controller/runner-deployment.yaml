@@ -8,11 +8,14 @@ spec:
   replicas: 1
   template:
     spec:
-      repository: rolandsebastien/devops-cluster-gitops
+      repository: rolandsebastien/testops
       labels:
         - self-hosted
+        - kubernetes
+        - linux
+        - x64
       hostAliases:
-        - ip: "192.168.2.108"
+        - ip: "192.168.2.6"
           hostnames:
             - registry.local
             - registry-ui.local
@@ -21,6 +24,10 @@ spec:
             - longhorn.local
             - prometheus.local
             - dashboard.local
+            - fm-compta-consulting.local
+            - sonarqube.local
+            - allure.local
+            - zap.local
       containers:
         - name: runner
           image: summerwind/actions-runner-dind
@@ -29,11 +36,11 @@ spec:
               value: tcp://localhost:2375
           resources:
             requests:
-              cpu: "1"
-              memory: "1Gi"
-            limits:
               cpu: "2"
-              memory: "2Gi"
+              memory: "3Gi"
+            limits:
+              cpu: "4"
+              memory: "6Gi"
         - name: dind
           image: docker:dind
           args:
@@ -42,11 +49,11 @@ spec:
             privileged: true
           resources:
             requests:
-              cpu: "500m"
-              memory: "512Mi"
-            limits:
               cpu: "1"
-              memory: "1Gi"
+              memory: "2Gi"
+            limits:
+              cpu: "2"
+              memory: "4Gi"
 
 ---
 apiVersion: actions.summerwind.dev/v1alpha1
@@ -62,4 +69,4 @@ spec:
   metrics:
     - type: TotalNumberOfQueuedAndInProgressWorkflowRuns
       repositoryNames:
-        - rolandsebastien/devops-cluster-gitops
+        - rolandsebastien/testops

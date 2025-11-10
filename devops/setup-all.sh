@@ -88,11 +88,28 @@ if [ -z "$GH_PAT" ]; then
 fi
 
 echo "Creating the secret for the runner controller..."
-kubectl create secret generic controller-manager -n actions-runner-system --from-literal=github_token="$GH_PAT" --dry-run=client -o yaml | kubectl apply -f -
+kubectl create secret generic controller-manager -n actions-runner-system \
+  --from-literal=github_token="$GH_PAT" \
+  --dry-run=client -o yaml | kubectl apply -f -
 
 echo ""
 echo "--> Installing GitHub Actions Runner Controller..."
-./actions-runner-controller/install-actions-runner-controller.sh
+
+# Add the Helm repo for the runner controller
+helm repo add actions-runner-controller https://actions-runner-controller.github.io/actions-runner-controller > /dev/null 2>&1
+helm repo update > /dev/null 2>&1
+
+# Install the runner controller with Helm
+helm upgrade --install actions-runner-controller actions-runner-controller/actions-runner-controller \
+  --namespace "actions-runner-system" \
+  --create-namespace \
+  --set githubRepository="rolandsebastien/testops" > /dev/null
+
+echo "Waiting for GitHub Actions Runner Controller to be ready..."
+
+# Wait for the controller deployment to be available
+kubectl wait --for=condition=available --timeout=180s deployment/actions-runner-controller -n "actions-runner-system" 2>/dev/null || true
+
 echo "GitHub Actions Runner Controller installation complete."
 
 echo ""
@@ -219,6 +236,8 @@ echo ""
 echo "App URL: https://fm-compta-consulting.local"
 echo ""
 echo "SonarQube URL: https://sonarqube.local"
+echo "SonarQube admin credentials: admin / admin"
 echo "Allure Dashboard URL: https://allure.local"
-echo "OWASP ZAP URL: https://zap.local"
+echo ""
+echo "GitHub Actions Self-Hosted Runner: Check https://github.com/rolandsebastien/testops/settings/actions/runners"
 echo ""

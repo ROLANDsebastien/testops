@@ -9,13 +9,16 @@ spec:
   template:
     spec:
       repository: rolandsebastien/testops
+      githubAPICredentialsFrom:
+        secretRef:
+          name: controller-manager
       labels:
         - self-hosted
         - kubernetes
         - linux
         - x64
       hostAliases:
-        - ip: "192.168.2.6"
+        - ip: "192.168.2.9"
           hostnames:
             - registry.local
             - registry-ui.local
@@ -27,7 +30,6 @@ spec:
             - fm-compta-consulting.local
             - sonarqube.local
             - allure.local
-            - zap.local
       containers:
         - name: runner
           image: summerwind/actions-runner-dind

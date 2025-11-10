@@ -9,6 +9,7 @@ spec:
   template:
     spec:
       repository: rolandsebastien/testops
+      ephemeral: false
       githubAPICredentialsFrom:
         secretRef:
           name: controller-manager

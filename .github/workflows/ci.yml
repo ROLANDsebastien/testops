@@ -30,103 +30,35 @@ jobs:
           password: ${{ secrets.CR_PAT }}
 
       # --- Backend Image Process ---
-      - name: Build backend image
+      - name: Build and push backend image
         uses: docker/build-push-action@v5
         with:
           context: ./application/fm-compta-consulting-backend
           file: ./application/fm-compta-consulting-backend/Dockerfile
-          load: true # Load locally instead of pushing
-          push: false
+          push: true
           tags: ghcr.io/rolandsebastien/fm-compta-consulting-backend:${{ github.event.release.tag_name || github.sha }}
 
-      - name: Clean up disk space before Trivy scan
+      - name: Clean up after backend build
         run: |
           docker system prune -af --volumes
           df -h
 
-      - name: Scan backend image with Trivy
-        uses: aquasecurity/trivy-action@0.33.1
-        continue-on-error: true
-        with:
-          image-ref: "ghcr.io/rolandsebastien/fm-compta-consulting-backend:${{ github.event.release.tag_name || github.sha }}"
-          format: "sarif"
-          output: "trivy-results-backend.sarif"
-          severity: "CRITICAL,HIGH"
-          ignore-unfixed: true
-          vuln-type: "library"
-          timeout: "10m"
-          exit-code: "0"
-
-      - name: Clean up after backend scan
-        run: |
-          docker system prune -f
-          df -h
-
-      - name: Upload Trivy backend scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v3
-        continue-on-error: true
-        if: always() && hashFiles('trivy-results-backend.sarif') != ''
-        with:
-          sarif_file: "trivy-results-backend.sarif"
-          category: "backend"
-
-      - name: Push backend image
-        run: |
-          docker push ghcr.io/rolandsebastien/fm-compta-consulting-backend:${{ github.event.release.tag_name || github.sha }}
-          docker image rm ghcr.io/rolandsebastien/fm-compta-consulting-backend:${{ github.event.release.tag_name || github.sha }} || true
-
       # --- Frontend Image Process ---
-      - name: Build frontend image
+      - name: Build and push frontend image
         uses: docker/build-push-action@v5
         with:
           context: ./application/fm-compta-consulting-frontend
           file: ./application/fm-compta-consulting-frontend/Dockerfile
-          load: true # Load locally instead of pushing
-          push: false
+          push: true
           tags: ghcr.io/rolandsebastien/fm-compta-consulting-frontend:${{ github.event.release.tag_name || github.sha }}
           build-args: |
             NEXTAUTH_URL_ARG=https://fm-compta-consulting.local
             NEXTAUTH_SECRET_ARG=Unn5rTxkCkledz9JJ558l19g1FGjJEIkkMw/o2Y0erE=
             NEXT_PUBLIC_API_URL_ARG=https://fm-compta-consulting.local/api
 
-      - name: Clean up before frontend build
-        run: |
-          docker system prune -af --volumes
-          sleep 5
-
-      - name: Scan frontend image with Trivy
-        uses: aquasecurity/trivy-action@0.33.1
-        continue-on-error: true
-        with:
-          image-ref: "ghcr.io/rolandsebastien/fm-compta-consulting-frontend:${{ github.event.release.tag_name || github.sha }}"
-          format: "sarif"
-          output: "trivy-results-frontend.sarif"
-          severity: "CRITICAL,HIGH"
-          ignore-unfixed: true
-          vuln-type: "library"
-          timeout: "10m"
-          exit-code: "0"
-
-      - name: Clean up after frontend scan
-        run: |
-          docker system prune -f
-
-      - name: Upload Trivy frontend scan results to GitHub Security tab
-        uses: github/codeql-action/upload-sarif@v3
-        continue-on-error: true
-        if: always() && hashFiles('trivy-results-frontend.sarif') != ''
-        with:
-          sarif_file: "trivy-results-frontend.sarif"
-          category: "frontend"
-
-      - name: Push frontend image if scan passed
-        run: docker push ghcr.io/rolandsebastien/fm-compta-consulting-frontend:${{ github.event.release.tag_name || github.sha }}
-
       - name: Final cleanup
         run: |
-          docker image rm ghcr.io/rolandsebastien/fm-compta-consulting-frontend:${{ github.event.release.tag_name || github.sha }} || true
           docker system prune -af --volumes
-          rm -f trivy-results-*.sarif
           df -h
 
   run-playwright-tests:

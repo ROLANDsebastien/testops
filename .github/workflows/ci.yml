@@ -64,6 +64,7 @@ jobs:
   run-playwright-tests:
     needs: build-and-push-images
     runs-on: self-hosted
+    timeout-minutes: 30
     permissions:
       contents: read
     steps:
@@ -76,15 +77,17 @@ jobs:
           node-version: "18"
 
       - name: Install Playwright dependencies
+        timeout-minutes: 15
         run: |
           cd application/fm-compta-consulting-frontend
           npm ci
-          npx playwright install --with-deps
+          npx playwright install --with-deps chromium
 
       - name: Run Playwright tests
+        timeout-minutes: 10
         run: |
           cd application/fm-compta-consulting-frontend
-          npx playwright test --reporter=html,junit
+          npx playwright test --reporter=html,junit --workers=1
 
       # Temporarily disabled - runner ephemeral mode causes 403 errors
       # - name: Upload Playwright test results

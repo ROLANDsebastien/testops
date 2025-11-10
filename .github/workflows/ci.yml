@@ -86,21 +86,22 @@ jobs:
           cd application/fm-compta-consulting-frontend
           npx playwright test --reporter=html,junit
 
-      - name: Upload Playwright test results
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: playwright-test-results
-          path: application/fm-compta-consulting-frontend/test-results/
-          retention-days: 30
+      # Temporarily disabled - runner ephemeral mode causes 403 errors
+      # - name: Upload Playwright test results
+      #   uses: actions/upload-artifact@v4
+      #   if: always()
+      #   with:
+      #     name: playwright-test-results
+      #     path: application/fm-compta-consulting-frontend/test-results/
+      #     retention-days: 30
 
-      - name: Upload Playwright HTML report
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: playwright-html-report
-          path: application/fm-compta-consulting-frontend/playwright-report/
-          retention-days: 30
+      # - name: Upload Playwright HTML report
+      #   uses: actions/upload-artifact@v4
+      #   if: always()
+      #   with:
+      #     name: playwright-html-report
+      #     path: application/fm-compta-consulting-frontend/playwright-report/
+      #     retention-days: 30
 
       - name: Install Allure
         run: |
@@ -124,13 +125,14 @@ jobs:
             echo "No test results to generate report from"
           fi
 
-      - name: Upload Allure report
-        uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: allure-report
-          path: application/fm-compta-consulting-frontend/allure-report/
-          retention-days: 30
+      # Temporarily disabled - runner ephemeral mode causes 403 errors
+      # - name: Upload Allure report
+      #   uses: actions/upload-artifact@v4
+      #   if: always()
+      #   with:
+      #     name: allure-report
+      #     path: application/fm-compta-consulting-frontend/allure-report/
+      #     retention-days: 30
 
   update-manifests:
     needs: [build-and-push-images, run-playwright-tests]

@@ -38,11 +38,11 @@ spec:
               value: tcp://localhost:2375
           resources:
             requests:
-              cpu: "2"
-              memory: "3Gi"
-            limits:
-              cpu: "4"
+              cpu: "3"
               memory: "6Gi"
+            limits:
+              cpu: "6"
+              memory: "12Gi"
         - name: dind
           image: docker:dind
           args:
@@ -51,11 +51,11 @@ spec:
             privileged: true
           resources:
             requests:
-              cpu: "1"
-              memory: "2Gi"
-            limits:
               cpu: "2"
               memory: "4Gi"
+            limits:
+              cpu: "4"
+              memory: "8Gi"
 
 ---
 apiVersion: actions.summerwind.dev/v1alpha1

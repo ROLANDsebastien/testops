@@ -41,19 +41,8 @@ jobs:
 
       - name: Clean up disk space before Trivy scan
         run: |
-          docker system prune -f
+          docker system prune -af --volumes
           df -h
-
-      - name: Monitor resources before backend scan
-        run: |
-          echo "Disk usage:"
-          df -h
-          echo "Memory usage:"
-          free -h
-          echo "CPU load:"
-          uptime
-          echo "Running processes:"
-          ps aux --sort=-%cpu | head -10
 
       - name: Scan backend image with Trivy
         uses: aquasecurity/trivy-action@0.33.1
@@ -66,14 +55,10 @@ jobs:
           vuln-type: "library"
           timeout: "10m"
 
-      - name: Monitor resources after backend scan
+      - name: Clean up after backend scan
         run: |
-          echo "Disk usage after backend scan:"
+          docker system prune -f
           df -h
-          echo "Memory usage after backend scan:"
-          free -h
-          echo "CPU load after backend scan:"
-          uptime
 
       - name: Upload Trivy backend scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v3
@@ -82,7 +67,9 @@ jobs:
           category: "backend"
 
       - name: Push backend image if scan passed
-        run: docker push ghcr.io/rolandsebastien/fm-compta-consulting-backend:${{ github.event.release.tag_name || github.sha }}
+        run: |
+          docker push ghcr.io/rolandsebastien/fm-compta-consulting-backend:${{ github.event.release.tag_name || github.sha }}
+          docker image rm ghcr.io/rolandsebastien/fm-compta-consulting-backend:${{ github.event.release.tag_name || github.sha }} || true
 
       # --- Frontend Image Process ---
       - name: Build frontend image
@@ -98,21 +85,10 @@ jobs:
             NEXTAUTH_SECRET_ARG=Unn5rTxkCkledz9JJ558l19g1FGjJEIkkMw/o2Y0erE=
             NEXT_PUBLIC_API_URL_ARG=https://fm-compta-consulting.local/api
 
-      - name: Clean up after backend push
+      - name: Clean up before frontend build
         run: |
-          docker image rm ghcr.io/rolandsebastien/fm-compta-consulting-backend:${{ github.event.release.tag_name || github.sha }} || true
-          docker system prune -f
-
-      - name: Monitor resources before frontend scan
-        run: |
-          echo "Disk usage before frontend scan:"
-          df -h
-          echo "Memory usage before frontend scan:"
-          free -h
-          echo "CPU load before frontend scan:"
-          uptime
-          echo "Running processes before frontend scan:"
-          ps aux --sort=-%cpu | head -10
+          docker system prune -af --volumes
+          sleep 5
 
       - name: Scan frontend image with Trivy
         uses: aquasecurity/trivy-action@0.33.1
@@ -125,14 +101,9 @@ jobs:
           vuln-type: "library"
           timeout: "10m"
 
-      - name: Monitor resources after frontend scan
+      - name: Clean up after frontend scan
         run: |
-          echo "Disk usage after frontend scan:"
-          df -h
-          echo "Memory usage after frontend scan:"
-          free -h
-          echo "CPU load after frontend scan:"
-          uptime
+          docker system prune -f
 
       - name: Upload Trivy frontend scan results to GitHub Security tab
         uses: github/codeql-action/upload-sarif@v3
@@ -146,8 +117,9 @@ jobs:
       - name: Final cleanup
         run: |
           docker image rm ghcr.io/rolandsebastien/fm-compta-consulting-frontend:${{ github.event.release.tag_name || github.sha }} || true
-          docker system prune -f
+          docker system prune -af --volumes
           rm -f trivy-results-*.sarif
+          df -h
 
   run-playwright-tests:
     needs: build-and-push-images

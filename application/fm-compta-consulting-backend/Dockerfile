@@ -10,20 +10,13 @@ COPY . .
 
 RUN npm run build
 
-# Prune dev dependencies after build
-RUN npm prune --production
-
 FROM node:20-alpine AS production
 
 WORKDIR /app
 
-# Copy package files for reference
 COPY package*.json ./
+RUN npm ci --omit=dev
 
-# Copy production node_modules from build stage
-COPY --from=build /app/node_modules ./node_modules
-
-# Copy built application
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/scripts ./scripts
 

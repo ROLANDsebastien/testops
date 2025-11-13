@@ -128,16 +128,14 @@ jobs:
           cd application/fm-compta-consulting-frontend
           npm ci
 
-          # Download SonarScanner
-          curl -o sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
-          unzip -q sonar-scanner.zip
-
-          # Run analysis
-          sonar-scanner-5.0.1.3006-linux/bin/sonar-scanner \
+          # Run SonarQube analysis using Docker
+          docker run --rm \
+            -v "$(pwd):/usr/src" \
+            -e SONAR_HOST_URL=$SONAR_HOST_URL \
+            -e SONAR_TOKEN=$SONAR_TOKEN \
+            sonarsource/sonar-scanner-cli \
             -Dsonar.projectKey=fm-compta-consulting-frontend \
             -Dsonar.sources=src \
-            -Dsonar.host.url=$SONAR_HOST_URL \
-            -Dsonar.token=$SONAR_TOKEN \
             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
 
       - name: SonarQube Scan - Backend
@@ -148,16 +146,14 @@ jobs:
         run: |
           cd application/fm-compta-consulting-backend
 
-          # Download SonarScanner
-          curl -o sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
-          unzip -q sonar-scanner.zip
-
-          # Run analysis
-          sonar-scanner-5.0.1.3006-linux/bin/sonar-scanner \
+          # Run SonarQube analysis using Docker
+          docker run --rm \
+            -v "$(pwd):/usr/src" \
+            -e SONAR_HOST_URL=$SONAR_HOST_URL \
+            -e SONAR_TOKEN=$SONAR_TOKEN \
+            sonarsource/sonar-scanner-cli \
             -Dsonar.projectKey=fm-compta-consulting-backend \
-            -Dsonar.sources=src \
-            -Dsonar.host.url=$SONAR_HOST_URL \
-            -Dsonar.token=$SONAR_TOKEN
+            -Dsonar.sources=src
 
   run-owasp-zap-scan:
     needs: build-and-push-images

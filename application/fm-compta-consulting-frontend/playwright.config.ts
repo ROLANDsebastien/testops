@@ -19,6 +19,12 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
+  /* Increase timeout for CI environment */
+  timeout: 60000,
+  /* Expect timeout for assertions */
+  expect: {
+    timeout: 10000,
+  },
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
     ["html", { outputFolder: "playwright-report", open: "never" }],
@@ -35,24 +41,39 @@ export default defineConfig({
 
     /* Ignore HTTPS errors for self-signed certificates in CI */
     ignoreHTTPSErrors: !!process.env.CI,
+
+    /* Screenshot on failure */
+    screenshot: "only-on-failure",
+
+    /* Video on retry */
+    video: "retain-on-failure",
   },
 
   /* Configure projects for major browsers */
-  projects: [
-    {
-      name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
-    },
+  projects: process.env.CI
+    ? [
+        // Only run chromium in CI for speed
+        {
+          name: "chromium",
+          use: { ...devices["Desktop Chrome"] },
+        },
+      ]
+    : [
+        {
+          name: "chromium",
+          use: { ...devices["Desktop Chrome"] },
+        },
 
-    {
-      name: "firefox",
-      use: { ...devices["Desktop Firefox"] },
-    },
+        {
+          name: "firefox",
+          use: { ...devices["Desktop Firefox"] },
+        },
 
-    {
-      name: "webkit",
-      use: { ...devices["Desktop Safari"] },
-    },
+        {
+          name: "webkit",
+          use: { ...devices["Desktop Safari"] },
+        },
+      ],
 
     /* Test against mobile viewports. */
     // {

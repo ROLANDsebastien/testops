@@ -130,6 +130,7 @@ jobs:
     runs-on: self-hosted
     timeout-minutes: 15
     continue-on-error: true
+    if: false # Temporarily disabled - requires configuration
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -147,13 +148,7 @@ jobs:
           SONAR_HOST_URL: https://sonarqube.local
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          cd application/fm-compta-consulting-frontend
-          npx sonarqube-scanner \
-            -Dsonar.projectKey=fm-compta-consulting-frontend \
-            -Dsonar.sources=src \
-            -Dsonar.host.url=$SONAR_HOST_URL \
-            -Dsonar.token=$SONAR_TOKEN \
-            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+          echo "SonarQube scan temporarily disabled"
 
       - name: SonarQube Scan - Backend
         continue-on-error: true
@@ -161,12 +156,7 @@ jobs:
           SONAR_HOST_URL: https://sonarqube.local
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          cd application/fm-compta-consulting-backend
-          npx sonarqube-scanner \
-            -Dsonar.projectKey=fm-compta-consulting-backend \
-            -Dsonar.sources=src \
-            -Dsonar.host.url=$SONAR_HOST_URL \
-            -Dsonar.token=$SONAR_TOKEN
+          echo "SonarQube scan temporarily disabled"
 
   run-owasp-zap-scan:
     needs: build-and-push-images

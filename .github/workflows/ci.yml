@@ -81,14 +81,16 @@ jobs:
           npm ci
 
       - name: Install Playwright browsers
+        env:
+          PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/.browsers
         run: |
           cd application/fm-compta-consulting-frontend
-          npx playwright install chromium --with-deps
+          npx playwright install chromium
 
       - name: Run Playwright tests
         env:
           PLAYWRIGHT_BASE_URL: https://fm-compta-consulting.local
-          HOME: /tmp
+          PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/.browsers
         run: |
           cd application/fm-compta-consulting-frontend
           npx playwright test --reporter=list,html --workers=1 --project=chromium

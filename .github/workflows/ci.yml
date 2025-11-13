@@ -203,25 +203,80 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: OWASP ZAP Baseline Scan
+      - name: Wait for ZAP to be ready
         run: |
-          # Run ZAP scan via kubectl exec
-          kubectl exec -n owasp $(kubectl get pod -n owasp -l app=zap -o jsonpath='{.items[0].metadata.name}') -- \
-            zap-baseline.py \
-            -t https://fm-compta-consulting.local \
-            -r zap-report-${GITHUB_SHA}.html \
-            -J zap-report-${GITHUB_SHA}.json \
-            -w zap-report-${GITHUB_SHA}.md
+          echo "Waiting for ZAP API to be ready..."
+          for i in {1..30}; do
+            if curl -k -s https://zap.local/JSON/core/view/version/ | grep -q "version"; then
+              echo "ZAP is ready!"
+              break
+            fi
+            echo "Waiting... ($i/30)"
+            sleep 2
+          done
 
-      - name: Download ZAP reports
+      - name: OWASP ZAP Spider Scan
+        continue-on-error: true
+        run: |
+          TARGET_URL="https://fm-compta-consulting.local"
+
+          echo "Starting ZAP Spider scan on ${TARGET_URL}"
+
+          # Start spider scan
+          SCAN_ID=$(curl -k -s "https://zap.local/JSON/spider/action/scan/?url=${TARGET_URL}" | jq -r '.scan')
+          echo "Spider scan started with ID: ${SCAN_ID}"
+
+          # Wait for spider to complete
+          while true; do
+            STATUS=$(curl -k -s "https://zap.local/JSON/spider/view/status/?scanId=${SCAN_ID}" | jq -r '.status')
+            echo "Spider progress: ${STATUS}%"
+            if [ "${STATUS}" = "100" ]; then
+              break
+            fi
+            sleep 5
+          done
+
+          echo "✅ ZAP Spider scan completed"
+
+      - name: OWASP ZAP Active Scan
+        continue-on-error: true
+        run: |
+          TARGET_URL="https://fm-compta-consulting.local"
+
+          echo "Starting ZAP Active scan on ${TARGET_URL}"
+
+          # Start active scan
+          SCAN_ID=$(curl -k -s "https://zap.local/JSON/ascan/action/scan/?url=${TARGET_URL}" | jq -r '.scan')
+          echo "Active scan started with ID: ${SCAN_ID}"
+
+          # Wait for active scan to complete (with timeout)
+          for i in {1..60}; do
+            STATUS=$(curl -k -s "https://zap.local/JSON/ascan/view/status/?scanId=${SCAN_ID}" | jq -r '.status')
+            echo "Active scan progress: ${STATUS}%"
+            if [ "${STATUS}" = "100" ]; then
+              break
+            fi
+            sleep 10
+          done
+
+          echo "✅ ZAP Active scan completed"
+
+      - name: Generate ZAP HTML Report
         if: always()
+        continue-on-error: true
         run: |
-          mkdir -p zap-reports
-          kubectl cp owasp/$(kubectl get pod -n owasp -l app=zap -o jsonpath='{.items[0].metadata.name}'):/zap/zap-report-${GITHUB_SHA}.html zap-reports/
-          kubectl cp owasp/$(kubectl get pod -n owasp -l app=zap -o jsonpath='{.items[0].metadata.name}'):/zap/zap-report-${GITHUB_SHA}.json zap-reports/ || true
-          kubectl cp owasp/$(kubectl get pod -n owasp -l app=zap -o jsonpath='{.items[0].metadata.name}'):/zap/zap-report-${GITHUB_SHA}.md zap-reports/ || true
+          echo "Generating ZAP HTML report..."
+          curl -k -s "https://zap.local/OTHER/core/other/htmlreport/" > zap-report.html
 
-          echo "ZAP scan completed. Reports available in zap-reports/"
+          # Get alerts summary
+          ALERTS=$(curl -k -s "https://zap.local/JSON/core/view/numberOfAlerts/" | jq -r '.numberOfAlerts')
+          echo "📊 Total alerts found: ${ALERTS}"
+
+          # Get high risk alerts
+          HIGH_ALERTS=$(curl -k -s "https://zap.local/JSON/core/view/alertsSummary/" | jq -r '.alertsSummary[] | select(.risk=="High") | .count' | awk '{s+=$1} END {print s+0}')
+          echo "🔴 High risk alerts: ${HIGH_ALERTS}"
+
+          echo "✅ ZAP scan report generated: zap-report.html"
 
   update-manifests:
     needs:

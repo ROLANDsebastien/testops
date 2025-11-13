@@ -10,6 +10,7 @@ spec:
     spec:
       repository: rolandsebastien/testops
       ephemeral: false
+      dockerdWithinRunnerContainer: true
       githubAPICredentialsFrom:
         secretRef:
           name: controller-manager
@@ -19,7 +20,7 @@ spec:
         - linux
         - x64
       hostAliases:
-        - ip: "192.168.2.9"
+        - ip: "__INGRESS_IP__"
           hostnames:
             - registry.local
             - registry-ui.local
@@ -31,32 +32,22 @@ spec:
             - fm-compta-consulting.local
             - sonarqube.local
             - allure.local
-      containers:
-        - name: runner
-          image: summerwind/actions-runner-dind
-          env:
-            - name: DOCKER_HOST
-              value: tcp://localhost:2375
-          resources:
-            requests:
-              cpu: "2"
-              memory: "4Gi"
-            limits:
-              cpu: "4"
-              memory: "8Gi"
-        - name: dind
-          image: docker:dind
-          args:
-            - --insecure-registry=registry.local
-          securityContext:
-            privileged: true
-          resources:
-            requests:
-              cpu: "1"
-              memory: "2Gi"
-            limits:
-              cpu: "2"
-              memory: "4Gi"
+      image: summerwind/actions-runner-dind:ubuntu-22.04
+      dockerRegistryMirror: ""
+      dockerdContainerResources:
+        limits:
+          cpu: "2"
+          memory: "4Gi"
+        requests:
+          cpu: "1"
+          memory: "2Gi"
+      resources:
+        requests:
+          cpu: "2"
+          memory: "4Gi"
+        limits:
+          cpu: "4"
+          memory: "8Gi"
 
 ---
 apiVersion: actions.summerwind.dev/v1alpha1

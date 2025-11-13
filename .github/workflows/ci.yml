@@ -85,9 +85,11 @@ jobs:
 
       - name: Run Playwright tests
         timeout-minutes: 10
+        env:
+          PLAYWRIGHT_BASE_URL: https://fm-compta-consulting.local
         run: |
           cd application/fm-compta-consulting-frontend
-          npx playwright test --reporter=html,junit --workers=1
+          npx playwright test --reporter=html,junit --workers=1 --project=chromium
 
       # Temporarily disabled - runner ephemeral mode causes 403 errors
       # - name: Upload Playwright test results

@@ -26,7 +26,7 @@ jobs:
         run: |
           echo "=== System Info ==="
           docker --version
-          docker buildx version
+          docker buildx version || echo "buildx not available as command"
           df -h
           echo ""
           echo "=== Docker Info ==="
@@ -34,9 +34,15 @@ jobs:
           echo ""
           echo "=== Available space ==="
           df -h /var/lib/docker || df -h
+          echo ""
+          echo "=== Buildx builders ==="
+          docker buildx ls || echo "No buildx available"
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+      - name: Setup Buildx for DIND
+        run: |
+          # Create and use a new builder instance for DIND
+          docker buildx create --name mybuilder --driver docker-container --use || true
+          docker buildx inspect --bootstrap || echo "Using default builder"
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
@@ -58,14 +64,15 @@ jobs:
           ls -la ./application/fm-compta-consulting-backend/
 
       - name: Build and push backend image
-        uses: docker/build-push-action@v5
-        with:
-          context: ./application/fm-compta-consulting-backend
-          file: ./application/fm-compta-consulting-backend/Dockerfile
-          push: true
-          tags: ghcr.io/rolandsebastien/fm-compta-consulting-backend:${{ github.event.release.tag_name || github.sha }}
-          no-cache: true
-          progress: plain
+        run: |
+          docker buildx build \
+            --platform linux/arm64 \
+            --push \
+            --progress=plain \
+            --no-cache \
+            -t ghcr.io/rolandsebastien/fm-compta-consulting-backend:${{ github.event.release.tag_name || github.sha }} \
+            -f ./application/fm-compta-consulting-backend/Dockerfile \
+            ./application/fm-compta-consulting-backend
 
       - name: Clean up after backend build
         run: |
@@ -85,18 +92,18 @@ jobs:
           ls -la ./application/fm-compta-consulting-frontend/
 
       - name: Build and push frontend image
-        uses: docker/build-push-action@v5
-        with:
-          context: ./application/fm-compta-consulting-frontend
-          file: ./application/fm-compta-consulting-frontend/Dockerfile
-          push: true
-          tags: ghcr.io/rolandsebastien/fm-compta-consulting-frontend:${{ github.event.release.tag_name || github.sha }}
-          no-cache: true
-          progress: plain
-          build-args: |
-            NEXTAUTH_URL_ARG=https://fm-compta-consulting.local
-            NEXTAUTH_SECRET_ARG=Unn5rTxkCkledz9JJ558l19g1FGjJEIkkMw/o2Y0erE=
-            NEXT_PUBLIC_API_URL_ARG=https://fm-compta-consulting.local/api
+        run: |
+          docker buildx build \
+            --platform linux/arm64 \
+            --push \
+            --progress=plain \
+            --no-cache \
+            --build-arg NEXTAUTH_URL_ARG=https://fm-compta-consulting.local \
+            --build-arg NEXTAUTH_SECRET_ARG=Unn5rTxkCkledz9JJ558l19g1FGjJEIkkMw/o2Y0erE= \
+            --build-arg NEXT_PUBLIC_API_URL_ARG=https://fm-compta-consulting.local/api \
+            -t ghcr.io/rolandsebastien/fm-compta-consulting-frontend:${{ github.event.release.tag_name || github.sha }} \
+            -f ./application/fm-compta-consulting-frontend/Dockerfile \
+            ./application/fm-compta-consulting-frontend
 
       - name: Final cleanup
         run: |

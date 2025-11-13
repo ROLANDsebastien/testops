@@ -61,90 +61,175 @@ jobs:
           docker system prune -af --volumes
           df -h
 
-  # Temporarily disabled - Playwright needs proper headless browser setup in runner
-  # run-playwright-tests:
-  #   needs: build-and-push-images
-  #   runs-on: self-hosted
-  #   timeout-minutes: 15
-  #   continue-on-error: true
-  #   permissions:
-  #     contents: read
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v4
+  run-playwright-tests:
+    needs: build-and-push-images
+    runs-on: self-hosted
+    timeout-minutes: 20
+    continue-on-error: true
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-  #     - name: Setup Node.js
-  #       uses: actions/setup-node@v4
-  #       with:
-  #         node-version: "18"
+      - name: Install dependencies
+        run: |
+          cd application/fm-compta-consulting-frontend
+          npm ci
 
-  #     - name: Install Playwright dependencies
-  #       timeout-minutes: 5
-  #       continue-on-error: true
-  #       run: |
-  #         cd application/fm-compta-consulting-frontend
-  #         npm ci
-  #         npx playwright install --with-deps chromium
+      - name: Install Playwright browsers
+        run: |
+          cd application/fm-compta-consulting-frontend
+          npx playwright install chromium --with-deps
 
-  #     - name: Run Playwright tests
-  #       timeout-minutes: 5
-  #       continue-on-error: true
-  #       env:
-  #         PLAYWRIGHT_BASE_URL: https://fm-compta-consulting.local
-  #       run: |
-  #         cd application/fm-compta-consulting-frontend
-  #         npx playwright test --reporter=html,junit --workers=1 --project=chromium
+      - name: Run Playwright tests
+        env:
+          PLAYWRIGHT_BASE_URL: https://fm-compta-consulting.local
+          HOME: /tmp
+        run: |
+          cd application/fm-compta-consulting-frontend
+          npx playwright test --reporter=list,allure-playwright --workers=1 --project=chromium
 
-  #     # Temporarily disabled - runner ephemeral mode causes 403 errors
-  #     # - name: Upload Playwright test results
-  #     #   uses: actions/upload-artifact@v4
-  #     #   if: always()
-  #     #   with:
-  #     #     name: playwright-test-results
-  #     #     path: application/fm-compta-consulting-frontend/test-results/
-  #     #     retention-days: 30
+      - name: Generate Allure report
+        if: always()
+        run: |
+          cd application/fm-compta-consulting-frontend
 
-  #     # - name: Upload Playwright HTML report
-  #     #   uses: actions/upload-artifact@v4
-  #     #   if: always()
-  #     #   with:
-  #     #     name: playwright-html-report
-  #     #     path: application/fm-compta-consulting-frontend/playwright-report/
-  #     #     retention-days: 30
+          # Install Allure commandline
+          curl -o allure-2.24.0.tgz -Ls https://github.com/allure-framework/allure2/releases/download/2.24.0/allure-2.24.0.tgz
+          tar -zxvf allure-2.24.0.tgz -C /tmp/
 
-  #     - name: Install Allure
-  #       run: |
-  #         curl -Ls https://github.com/allure-framework/allure2/releases/download/2.24.0/allure-2.24.0.tgz | tar xz -C /tmp/
-  #         sudo mv /tmp/allure-2.24.0 /usr/local/allure
-  #         sudo chmod +x /usr/local/allure/bin/allure
-  #         echo "/usr/local/allure/bin" >> $GITHUB_PATH
+          # Generate report
+          if [ -d "allure-results" ]; then
+            /tmp/allure-2.24.0/bin/allure generate allure-results --clean -o allure-report
+            echo "Allure report generated successfully"
+          else
+            echo "No allure-results found"
+          fi
 
-  #     - name: Generate Allure report
-  #       run: |
-  #         cd application/fm-compta-consulting-frontend
-  #         if [ -d "test-results" ]; then
-  #           # Convert Playwright JUnit results to Allure format if needed
-  #           mkdir -p allure-results
-  #           # Allure can consume JUnit XML directly
-  #           cp -r test-results/* allure-results/ 2>/dev/null || echo "No test-results found"
+      - name: Upload Allure results to Allure service
+        if: always()
+        run: |
+          cd application/fm-compta-consulting-frontend
+          if [ -d "allure-results" ]; then
+            # Send results to Allure Docker Service API
+            PROJECT_ID="fm-compta-frontend"
 
-  #           # Generate the report
-  #           allure generate allure-results --clean -o allure-report
-  #         else
-  #           echo "No test results to generate report from"
-  #         fi
+            # Create project if not exists
+            curl -k -X POST "https://allure.local/allure-docker-service/projects" \
+              -H "Content-Type: application/json" \
+              -d "{\"id\": \"${PROJECT_ID}\"}" || true
 
-  #     # Temporarily disabled - runner ephemeral mode causes 403 errors
-  #     # - name: Upload Allure report
-  #     #   uses: actions/upload-artifact@v4
-  #     #   if: always()
-  #     #   with:
-  #     #     name: allure-report
-  #     #     path: application/fm-compta-consulting-frontend/allure-report/
-  #     #     retention-days: 30
+            # Upload results
+            cd allure-results
+            for file in *; do
+              if [ -f "$file" ]; then
+                RESULT_FILE=$(cat "$file" | base64 -w 0 || cat "$file" | base64)
+                curl -k -X POST "https://allure.local/allure-docker-service/send-results?project_id=${PROJECT_ID}" \
+                  -H "Content-Type: application/json" \
+                  -d "[{\"file_name\": \"$file\", \"content_base64\": \"${RESULT_FILE}\"}]"
+              fi
+            done
+
+            # Generate report
+            curl -k -X GET "https://allure.local/allure-docker-service/generate-report?project_id=${PROJECT_ID}&execution_name=build-${GITHUB_SHA}&execution_from=ci&execution_type=github-actions"
+
+            echo "✅ Allure report generated: https://allure.local/allure-docker-service/projects/${PROJECT_ID}/reports/latest"
+          fi
+
+  run-sonarqube-analysis:
+    needs: build-and-push-images
+    runs-on: self-hosted
+    timeout-minutes: 15
+    continue-on-error: true
+    if: ${{ secrets.SONAR_TOKEN != '' }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: SonarQube Scan - Frontend
+        env:
+          SONAR_HOST_URL: https://sonarqube.local
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          cd application/fm-compta-consulting-frontend
+          npm ci
+
+          # Download SonarScanner
+          curl -o sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
+          unzip -q sonar-scanner.zip
+
+          # Run analysis
+          sonar-scanner-5.0.1.3006-linux/bin/sonar-scanner \
+            -Dsonar.projectKey=fm-compta-consulting-frontend \
+            -Dsonar.sources=src \
+            -Dsonar.host.url=$SONAR_HOST_URL \
+            -Dsonar.token=$SONAR_TOKEN \
+            -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+
+      - name: SonarQube Scan - Backend
+        env:
+          SONAR_HOST_URL: https://sonarqube.local
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          cd application/fm-compta-consulting-backend
+
+          # Download SonarScanner
+          curl -o sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
+          unzip -q sonar-scanner.zip
+
+          # Run analysis
+          sonar-scanner-5.0.1.3006-linux/bin/sonar-scanner \
+            -Dsonar.projectKey=fm-compta-consulting-backend \
+            -Dsonar.sources=src \
+            -Dsonar.host.url=$SONAR_HOST_URL \
+            -Dsonar.token=$SONAR_TOKEN
+
+  run-owasp-zap-scan:
+    needs: build-and-push-images
+    runs-on: self-hosted
+    timeout-minutes: 20
+    continue-on-error: true
+    if: always()
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: OWASP ZAP Baseline Scan
+        run: |
+          # Run ZAP scan via kubectl exec
+          kubectl exec -n owasp $(kubectl get pod -n owasp -l app=zap -o jsonpath='{.items[0].metadata.name}') -- \
+            zap-baseline.py \
+            -t https://fm-compta-consulting.local \
+            -r zap-report-${GITHUB_SHA}.html \
+            -J zap-report-${GITHUB_SHA}.json \
+            -w zap-report-${GITHUB_SHA}.md
+
+      - name: Download ZAP reports
+        if: always()
+        run: |
+          mkdir -p zap-reports
+          kubectl cp owasp/$(kubectl get pod -n owasp -l app=zap -o jsonpath='{.items[0].metadata.name}'):/zap/zap-report-${GITHUB_SHA}.html zap-reports/
+          kubectl cp owasp/$(kubectl get pod -n owasp -l app=zap -o jsonpath='{.items[0].metadata.name}'):/zap/zap-report-${GITHUB_SHA}.json zap-reports/ || true
+          kubectl cp owasp/$(kubectl get pod -n owasp -l app=zap -o jsonpath='{.items[0].metadata.name}'):/zap/zap-report-${GITHUB_SHA}.md zap-reports/ || true
+
+          echo "ZAP scan completed. Reports available in zap-reports/"
 
   update-manifests:
-    needs: [build-and-push-images]
+    needs:
+      [
+        build-and-push-images,
+        run-playwright-tests,
+        run-sonarqube-analysis,
+        run-owasp-zap-scan,
+      ]
     runs-on: self-hosted
     permissions:
       contents: write

@@ -142,7 +142,6 @@ jobs:
     runs-on: self-hosted
     timeout-minutes: 15
     continue-on-error: true
-    if: ${{ secrets.SONAR_TOKEN != '' }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -155,6 +154,7 @@ jobs:
           node-version: "18"
 
       - name: SonarQube Scan - Frontend
+        continue-on-error: true
         env:
           SONAR_HOST_URL: https://sonarqube.local
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -175,6 +175,7 @@ jobs:
             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
 
       - name: SonarQube Scan - Backend
+        continue-on-error: true
         env:
           SONAR_HOST_URL: https://sonarqube.local
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

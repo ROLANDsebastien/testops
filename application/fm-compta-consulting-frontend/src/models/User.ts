@@ -1,4 +1,4 @@
-import mongoose, { Schema, Document, model, models } from 'mongoose';
+import mongoose, { Schema, Document, model, models } from "mongoose";
 
 export interface IUser extends Document {
   name: string;
@@ -11,45 +11,45 @@ export interface IUser extends Document {
 
 const UserSchema: Schema = new Schema(
   {
-    name: { 
-      type: String, 
+    name: {
+      type: String,
       required: true,
-      trim: true
+      trim: true,
     },
-    email: { 
-      type: String, 
-      required: true, 
+    email: {
+      type: String,
+      required: true,
       unique: true,
       lowercase: true,
       trim: true,
-      index: true
+      index: true,
     },
-    password: { 
-      type: String, 
-      required: true 
+    password: {
+      type: String,
+      required: true,
     },
-    role: { 
-      type: String, 
-      default: 'user', 
-      enum: ['user', 'admin'],
-      index: true
+    role: {
+      type: String,
+      default: "user",
+      enum: ["user", "admin"],
+      index: true,
     },
   },
-  { 
+  {
     timestamps: true,
-    toJSON: { 
+    toJSON: {
       virtuals: true,
-      transform: (_, ret) => {
+      transform: (_: any, ret: any) => {
         ret.id = ret._id;
         delete ret._id;
         delete ret.password;
         delete ret.__v;
         return ret;
-      }
+      },
     },
-    toObject: { virtuals: true }
-  }
+    toObject: { virtuals: true },
+  },
 );
 
 // Optimisation: utiliser une fonction de création de modèle réutilisable
-export default models.User || model<IUser>('User', UserSchema);
+export default models.User || model<IUser>("User", UserSchema);

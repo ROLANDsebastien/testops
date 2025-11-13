@@ -15,34 +15,9 @@ jobs:
       contents: read
       packages: write
       security-events: write # Needed for SARIF upload
-    env:
-      DOCKER_BUILDKIT: 1
-      BUILDKIT_PROGRESS: plain
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      - name: Diagnostic - Check environment
-        run: |
-          echo "=== System Info ==="
-          docker --version
-          docker buildx version || echo "buildx not available as command"
-          df -h
-          echo ""
-          echo "=== Docker Info ==="
-          docker info
-          echo ""
-          echo "=== Available space ==="
-          df -h /var/lib/docker || df -h
-          echo ""
-          echo "=== Buildx builders ==="
-          docker buildx ls || echo "No buildx available"
-
-      - name: Setup Buildx for DIND
-        run: |
-          # Use the default builder which already works in DIND
-          docker buildx ls
-          echo "Using default docker builder"
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
@@ -52,17 +27,6 @@ jobs:
           password: ${{ secrets.CR_PAT }}
 
       # --- Backend Image Process ---
-      - name: Diagnostic - Backend build context
-        run: |
-          echo "=== Backend package.json ==="
-          cat ./application/fm-compta-consulting-backend/package.json
-          echo ""
-          echo "=== Backend package-lock.json exists? ==="
-          ls -lh ./application/fm-compta-consulting-backend/package-lock.json || echo "No package-lock.json found"
-          echo ""
-          echo "=== Backend directory contents ==="
-          ls -la ./application/fm-compta-consulting-backend/
-
       - name: Build and push backend image
         run: |
           docker buildx build \
@@ -80,17 +44,6 @@ jobs:
           df -h
 
       # --- Frontend Image Process ---
-      - name: Diagnostic - Frontend build context
-        run: |
-          echo "=== Frontend package.json ==="
-          cat ./application/fm-compta-consulting-frontend/package.json
-          echo ""
-          echo "=== Frontend package-lock.json exists? ==="
-          ls -lh ./application/fm-compta-consulting-frontend/package-lock.json || echo "No package-lock.json found"
-          echo ""
-          echo "=== Frontend directory contents ==="
-          ls -la ./application/fm-compta-consulting-frontend/
-
       - name: Build and push frontend image
         run: |
           docker buildx build \

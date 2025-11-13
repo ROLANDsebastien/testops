@@ -126,8 +126,7 @@ jobs:
           # Create placeholder report
           cd application/fm-compta-consulting-frontend
           mkdir -p playwright-report
-          cat <<'EOF' > playwright-report/SKIPPED.html
-<!DOCTYPE html>
+          echo '<!DOCTYPE html>
 <html>
 <head><title>Tests Skipped</title></head>
 <body style="font-family: Arial; margin: 40px;">
@@ -136,8 +135,7 @@ jobs:
   <p><strong>URL tested:</strong> https://fm-compta-consulting.local</p>
   <p>The application must be running before tests can execute.</p>
 </body>
-</html>
-EOF
+</html>' > playwright-report/SKIPPED.html
 
       - name: Upload Playwright HTML report
         if: always()

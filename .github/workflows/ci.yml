@@ -85,7 +85,11 @@ jobs:
           PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/.browsers
         run: |
           cd application/fm-compta-consulting-frontend
+          echo "Installing Playwright browsers to: $PLAYWRIGHT_BROWSERS_PATH"
           npx playwright install chromium
+          echo "Installation complete. Verifying..."
+          ls -la $PLAYWRIGHT_BROWSERS_PATH || echo "Browser path not found"
+          npx playwright install --help | grep -A 2 "browsers"
 
       - name: Run Playwright tests
         env:
@@ -117,7 +121,10 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "18"
+          node-version: "20"
+
+      - name: Install SonarQube Scanner
+        run: npm install -g sonarqube-scanner
 
       - name: SonarQube Scan - Frontend
         continue-on-error: true
@@ -126,16 +133,11 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           cd application/fm-compta-consulting-frontend
-          npm ci
-
-          # Run SonarQube analysis using Docker
-          docker run --rm \
-            -v "$(pwd):/usr/src" \
-            -e SONAR_HOST_URL=$SONAR_HOST_URL \
-            -e SONAR_TOKEN=$SONAR_TOKEN \
-            sonarsource/sonar-scanner-cli \
+          sonar-scanner \
             -Dsonar.projectKey=fm-compta-consulting-frontend \
             -Dsonar.sources=src \
+            -Dsonar.host.url=$SONAR_HOST_URL \
+            -Dsonar.token=$SONAR_TOKEN \
             -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
 
       - name: SonarQube Scan - Backend
@@ -145,15 +147,11 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
           cd application/fm-compta-consulting-backend
-
-          # Run SonarQube analysis using Docker
-          docker run --rm \
-            -v "$(pwd):/usr/src" \
-            -e SONAR_HOST_URL=$SONAR_HOST_URL \
-            -e SONAR_TOKEN=$SONAR_TOKEN \
-            sonarsource/sonar-scanner-cli \
+          sonar-scanner \
             -Dsonar.projectKey=fm-compta-consulting-backend \
-            -Dsonar.sources=src
+            -Dsonar.sources=src \
+            -Dsonar.host.url=$SONAR_HOST_URL \
+            -Dsonar.token=$SONAR_TOKEN
 
   run-owasp-zap-scan:
     needs: build-and-push-images

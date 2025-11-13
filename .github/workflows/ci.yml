@@ -126,18 +126,16 @@ jobs:
           # Create placeholder report
           cd application/fm-compta-consulting-frontend
           mkdir -p playwright-report
-          cat > playwright-report/SKIPPED.html << 'HTML'
-<!DOCTYPE html>
-<html>
-<head><title>Tests Skipped</title></head>
-<body style="font-family: Arial; margin: 40px;">
-  <h1>⚠️ Tests Skipped</h1>
-  <p><strong>Reason:</strong> Application was not accessible at check time</p>
-  <p><strong>URL tested:</strong> https://fm-compta-consulting.local</p>
-  <p>The application must be running before tests can execute.</p>
-</body>
-</html>
-HTML
+          echo '<!DOCTYPE html>' > playwright-report/SKIPPED.html
+          echo '<html>' >> playwright-report/SKIPPED.html
+          echo '<head><title>Tests Skipped</title></head>' >> playwright-report/SKIPPED.html
+          echo '<body style="font-family: Arial; margin: 40px;">' >> playwright-report/SKIPPED.html
+          echo '  <h1>⚠️ Tests Skipped</h1>' >> playwright-report/SKIPPED.html
+          echo '  <p><strong>Reason:</strong> Application was not accessible at check time</p>' >> playwright-report/SKIPPED.html
+          echo '  <p><strong>URL tested:</strong> https://fm-compta-consulting.local</p>' >> playwright-report/SKIPPED.html
+          echo '  <p>The application must be running before tests can execute.</p>' >> playwright-report/SKIPPED.html
+          echo '</body>' >> playwright-report/SKIPPED.html
+          echo '</html>' >> playwright-report/SKIPPED.html
 
       - name: Upload Playwright HTML report
         if: always()

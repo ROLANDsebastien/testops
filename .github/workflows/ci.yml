@@ -40,9 +40,9 @@ jobs:
 
       - name: Setup Buildx for DIND
         run: |
-          # Create and use a new builder instance for DIND
-          docker buildx create --name mybuilder --driver docker-container --use || true
-          docker buildx inspect --bootstrap || echo "Using default builder"
+          # Use the default builder which already works in DIND
+          docker buildx ls
+          echo "Using default docker builder"
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
@@ -66,13 +66,13 @@ jobs:
       - name: Build and push backend image
         run: |
           docker buildx build \
-            --platform linux/arm64 \
-            --push \
+            --load \
             --progress=plain \
-            --no-cache \
             -t ghcr.io/rolandsebastien/fm-compta-consulting-backend:${{ github.event.release.tag_name || github.sha }} \
             -f ./application/fm-compta-consulting-backend/Dockerfile \
             ./application/fm-compta-consulting-backend
+
+          docker push ghcr.io/rolandsebastien/fm-compta-consulting-backend:${{ github.event.release.tag_name || github.sha }}
 
       - name: Clean up after backend build
         run: |
@@ -94,16 +94,16 @@ jobs:
       - name: Build and push frontend image
         run: |
           docker buildx build \
-            --platform linux/arm64 \
-            --push \
+            --load \
             --progress=plain \
-            --no-cache \
             --build-arg NEXTAUTH_URL_ARG=https://fm-compta-consulting.local \
             --build-arg NEXTAUTH_SECRET_ARG=Unn5rTxkCkledz9JJ558l19g1FGjJEIkkMw/o2Y0erE= \
             --build-arg NEXT_PUBLIC_API_URL_ARG=https://fm-compta-consulting.local/api \
             -t ghcr.io/rolandsebastien/fm-compta-consulting-frontend:${{ github.event.release.tag_name || github.sha }} \
             -f ./application/fm-compta-consulting-frontend/Dockerfile \
             ./application/fm-compta-consulting-frontend
+
+          docker push ghcr.io/rolandsebastien/fm-compta-consulting-frontend:${{ github.event.release.tag_name || github.sha }}
 
       - name: Final cleanup
         run: |

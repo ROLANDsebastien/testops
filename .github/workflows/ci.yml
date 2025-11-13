@@ -29,9 +29,7 @@ jobs:
       # --- Backend Image Process ---
       - name: Build and push backend image
         run: |
-          docker buildx build \
-            --load \
-            --progress=plain \
+          docker build \
             -t ghcr.io/rolandsebastien/fm-compta-consulting-backend:${{ github.event.release.tag_name || github.sha }} \
             -f ./application/fm-compta-consulting-backend/Dockerfile \
             ./application/fm-compta-consulting-backend
@@ -46,9 +44,7 @@ jobs:
       # --- Frontend Image Process ---
       - name: Build and push frontend image
         run: |
-          docker buildx build \
-            --load \
-            --progress=plain \
+          docker build \
             --build-arg NEXTAUTH_URL_ARG=https://fm-compta-consulting.local \
             --build-arg NEXTAUTH_SECRET_ARG=Unn5rTxkCkledz9JJ558l19g1FGjJEIkkMw/o2Y0erE= \
             --build-arg NEXT_PUBLIC_API_URL_ARG=https://fm-compta-consulting.local/api \

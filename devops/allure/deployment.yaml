@@ -14,36 +14,39 @@ spec:
         app: allure
     spec:
       containers:
-      - name: allure
-        image: frankescobar/allure-docker-service:2.27.0-arm64v8
-        ports:
-        - containerPort: 5050
-        env:
-        - name: CHECK_RESULTS_EVERY_SECONDS
-          value: "30"
-        - name: KEEP_HISTORY
-          value: "true"
-        volumeMounts:
-        - name: allure-results
-          mountPath: /app/allure-results
-        - name: allure-reports
-          mountPath: /app/reports
-        resources:
-          requests:
-            memory: "512Mi"
-            cpu: "500m"
-          limits:
-            memory: "1Gi"
-            cpu: "1000m"
-        securityContext:
-          runAsUser: 1000
-          runAsGroup: 1000
-          allowPrivilegeEscalation: false
-          readOnlyRootFilesystem: false
-          runAsNonRoot: true
+        - name: allure
+          image: frankescobar/allure-docker-service:2.27.0-arm64v8
+          ports:
+            - containerPort: 5050
+          env:
+            - name: CHECK_RESULTS_EVERY_SECONDS
+              value: "30"
+            - name: KEEP_HISTORY
+              value: "true"
+            - name: SECURITY_ENABLED
+              value: "0"
+            - name: MAKE_VIEWER_ENDPOINTS_PUBLIC
+              value: "true"
+          volumeMounts:
+            - name: allure-results
+              mountPath: /app/allure-results
+            - name: allure-reports
+              mountPath: /app/reports
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "500m"
+            limits:
+              memory: "1Gi"
+              cpu: "1000m"
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
       volumes:
-      - name: allure-results
-        persistentVolumeClaim:
-          claimName: allure-results-pvc
-      - name: allure-reports
-        emptyDir: {}
+        - name: allure-results
+          persistentVolumeClaim:
+            claimName: allure-results-pvc
+        - name: allure-reports
+          emptyDir: {}

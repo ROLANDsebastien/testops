@@ -1,0 +1,44 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: fm-compta-consulting-route
+  namespace: default
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    # Backend API routes (exact matches first for priority)
+    - match: Host(`fm-compta-consulting.local`) && Path(`/api/auth/register`)
+      kind: Rule
+      services:
+        - name: fm-compta-consulting-backend
+          port: 3001
+    - match: Host(`fm-compta-consulting.local`) && Path(`/api/auth/login`)
+      kind: Rule
+      services:
+        - name: fm-compta-consulting-backend
+          port: 3001
+    - match: Host(`fm-compta-consulting.local`) && Path(`/api/auth/validate`)
+      kind: Rule
+      services:
+        - name: fm-compta-consulting-backend
+          port: 3001
+    - match: Host(`fm-compta-consulting.local`) && Path(`/api/health`)
+      kind: Rule
+      services:
+        - name: fm-compta-consulting-backend
+          port: 3001
+    # Frontend handles /api/auth prefix
+    - match: Host(`fm-compta-consulting.local`) && PathPrefix(`/api/auth`)
+      kind: Rule
+      services:
+        - name: fm-compta-consulting-frontend
+          port: 3000
+    # Frontend handles everything else
+    - match: Host(`fm-compta-consulting.local`)
+      kind: Rule
+      services:
+        - name: fm-compta-consulting-frontend
+          port: 3000
+  tls:
+    secretName: fm-compta-consulting-tls-secret

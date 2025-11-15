@@ -4,7 +4,7 @@ metadata:
   name: grafana-tls
   namespace: grafana
 spec:
-  secretName: grafana-tls
+  secretName: grafana-tls-secret
   issuerRef:
     name: selfsigned-issuer
     kind: ClusterIssuer

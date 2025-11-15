@@ -1,0 +1,16 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: zap-route
+  namespace: owasp
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`zap.local`)
+      kind: Rule
+      services:
+        - name: zap-service
+          port: 8080
+  tls:
+    secretName: zap-tls-secret

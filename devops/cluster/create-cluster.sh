@@ -3,8 +3,8 @@ set -e
 
 echo "Starting k3s cluster creation with Multipass..."
 
-# 1. Launch VMs with increased resources for TestOps workloads
-echo "Creating VMs with increased resources for TestOps..."
+# 1. Launch VMs
+echo "Creating VMs..."
 multipass launch --name k3s-master --cpus 4 --memory 4G --disk 15G
 multipass launch --name k3s-worker1 --cpus 8 --memory 12G --disk 30G
 multipass launch --name k3s-worker2 --cpus 8 --memory 12G --disk 30G
@@ -15,7 +15,7 @@ sleep 30
 
 # 2. Install k3s on master with a taint
 echo "Installing k3s on master node (k3s-master)..."
-multipass exec k3s-master -- bash -c "curl -sfL https://get.k3s.io | sh -s - --node-taint CriticalAddonsOnly=true:NoExecute --disable=traefik --disable-network-policy > /dev/null 2>&1"
+multipass exec k3s-master -- bash -c "curl -sfL https://get.k3s.io | sh -s - --node-taint CriticalAddonsOnly=true:NoExecute --disable-network-policy > /dev/null 2>&1"
 
 # 3. Get master IP and token
 echo "Getting connection info..."

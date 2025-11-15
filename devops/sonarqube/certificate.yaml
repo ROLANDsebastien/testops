@@ -4,10 +4,9 @@ metadata:
   name: sonarqube-tls
   namespace: sonarqube
 spec:
-  secretName: sonarqube-tls
+  secretName: sonarqube-tls-secret
   issuerRef:
     name: selfsigned-issuer
     kind: ClusterIssuer
-  commonName: sonarqube.local
   dnsNames:
-  - sonarqube.local
+    - sonarqube.local

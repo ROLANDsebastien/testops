@@ -20,7 +20,7 @@ spec:
         - linux
         - x64
       hostAliases:
-        - ip: "__INGRESS_IP__"
+        - ip: "192.168.2.3"
           hostnames:
             - registry.local
             - registry-ui.local

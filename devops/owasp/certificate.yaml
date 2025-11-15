@@ -4,10 +4,9 @@ metadata:
   name: zap-tls
   namespace: owasp
 spec:
-  secretName: zap-tls
+  secretName: zap-tls-secret
   issuerRef:
     name: selfsigned-issuer
     kind: ClusterIssuer
-  commonName: zap.local
   dnsNames:
-  - zap.local
+    - zap.local

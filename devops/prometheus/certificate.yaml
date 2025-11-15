@@ -4,7 +4,7 @@ metadata:
   name: prometheus-tls
   namespace: prometheus
 spec:
-  secretName: prometheus-tls
+  secretName: prometheus-tls-secret
   issuerRef:
     name: selfsigned-issuer
     kind: ClusterIssuer

@@ -4,10 +4,9 @@ metadata:
   name: longhorn-tls
   namespace: longhorn-system
 spec:
-  secretName: longhorn-tls
+  secretName: longhorn-tls-secret
   issuerRef:
     name: selfsigned-issuer
     kind: ClusterIssuer
-  commonName: longhorn.local
   dnsNames:
     - longhorn.local

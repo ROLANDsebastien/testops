@@ -1,0 +1,16 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: sonarqube-route
+  namespace: sonarqube
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`sonarqube.local`)
+      kind: Rule
+      services:
+        - name: sonarqube
+          port: 9000
+  tls:
+    secretName: sonarqube-tls-secret

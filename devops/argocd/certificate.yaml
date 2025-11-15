@@ -4,7 +4,7 @@ metadata:
   name: argocd-tls
   namespace: argocd
 spec:
-  secretName: argocd-tls
+  secretName: argocd-tls-secret
   issuerRef:
     name: selfsigned-issuer
     kind: ClusterIssuer

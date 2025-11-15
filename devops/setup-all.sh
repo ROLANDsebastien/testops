@@ -218,7 +218,7 @@ echo "Using worker IP for Ingress: $INGRESS_IP"
 # Remove any old entry for dashboard.local and add the new one
 # This requires sudo permissions.
 echo ""
-echo "Removing old '.local' entries from /etc/hosts."
+echo "Removing old entries from /etc/hosts."
 sudo sed -i '' '/.local/d' /etc/hosts
 
 echo ""

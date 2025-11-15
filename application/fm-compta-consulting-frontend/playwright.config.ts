@@ -1,4 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
+import * as path from "path";
 
 /**
  * Read environment variables from file.
@@ -29,6 +30,15 @@ export default defineConfig({
   reporter: [
     ["html", { outputFolder: "playwright-report", open: "never" }],
     ["junit", { outputFile: "test-results/junit.xml" }],
+    ["allure-playwright", {
+      outputFolder: "allure-results",
+      detail: true,
+      suiteTitle: true,
+      environmentInfo: {
+        E2E_NODE_VERSION: process.version,
+        E2E_OS: process.platform,
+      },
+    }],
     ["list"],
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */

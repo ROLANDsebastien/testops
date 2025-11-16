@@ -22,10 +22,11 @@ cd "${PROJECT_ROOT}"
 #------------------------------------------------------------------------------
 REPORT_DIR="${PROJECT_ROOT}/playwright-report"
 RESULTS_DIR="${PROJECT_ROOT}/test-results"
+ALLURE_RESULTS_DIR="${PROJECT_ROOT}/allure-results"
 SUMMARY_FILE="${RESULTS_DIR}/summary.txt"
 SKIPPED_HTML="${REPORT_DIR}/SKIPPED.html"
 
-PLAYWRIGHT_CMD=(npx playwright test --reporter=list,html,junit --workers=1 --project=chromium --max-failures=20)
+PLAYWRIGHT_CMD=(npx playwright test --workers=1 --project=chromium --max-failures=20)
 
 DEFAULT_BASE_URL="https://fm-compta-consulting.local"
 APP_URL="${PLAYWRIGHT_BASE_URL:-$DEFAULT_BASE_URL}"
@@ -58,8 +59,8 @@ log_error()    { printf "  ${RED}✖${NC} %s\n"   "$1"; }
 # Cleanup & Artifact Guarantees
 #------------------------------------------------------------------------------
 create_artifact_skeleton() {
-  rm -rf "${REPORT_DIR}" "${RESULTS_DIR}"
-  mkdir -p "${REPORT_DIR}" "${RESULTS_DIR}"
+  rm -rf "${REPORT_DIR}" "${RESULTS_DIR}" "${ALLURE_RESULTS_DIR}"
+  mkdir -p "${REPORT_DIR}" "${RESULTS_DIR}" "${ALLURE_RESULTS_DIR}"
 }
 
 write_summary() {
@@ -74,7 +75,7 @@ EOF
 }
 
 write_skipped_report() {
-  cat <<'EOF' > "${SKIPPED_HTML}"
+  cat <<EOF > "${SKIPPED_HTML}"
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -87,6 +88,7 @@ write_skipped_report() {
     h1 { color: #c0392b; }
     p { line-height: 1.5; }
     .meta { margin-top: 20px; padding: 16px; background: #fef9e7; border-left: 4px solid #f1c40f; }
+    code { background: #f4f6f8; padding: 2px 4px; border-radius: 4px; }
   </style>
 </head>
 <body>
@@ -96,14 +98,56 @@ write_skipped_report() {
        was unreachable from the CI runner.</p>
     <div class="meta">
       <p><strong>Requested URL:</strong> ${APP_URL}</p>
+      <p><strong>Retries attempted:</strong> ${MAX_ACCESS_RETRIES}</p>
+      <p><strong>Wait between retries:</strong> ${RETRY_WAIT_SECONDS}s</p>
       <p><strong>Timestamp (UTC):</strong> $(date -u '+%Y-%m-%d %H:%M:%S')</p>
     </div>
     <p>Please verify that the application has been deployed successfully and is accessible
        from within the CI cluster before re-running the tests.</p>
+    <p>Command executed from <code>${PROJECT_ROOT}</code> by CI user.</p>
   </div>
 </body>
 </html>
 EOF
+}
+
+write_allure_skip_result() {
+  local reason="${1:-Application ${APP_URL} unreachable from CI runner.}"
+  export APP_URL MAX_ACCESS_RETRIES CI_MODE ALLURE_RESULTS_DIR
+  ALLURE_SKIP_REASON="${reason}" python3 - <<'PYCODE'
+import json, os, time, pathlib
+
+timestamp = int(time.time() * 1000)
+payload = {
+    "uuid": f"playwright-skip-{timestamp}",
+    "name": "Playwright suite",
+    "historyId": "playwright-suite",
+    "fullName": "Playwright suite - CI gate",
+    "status": "skipped",
+    "statusDetails": {
+        "message": os.environ.get("ALLURE_SKIP_REASON", "Playwright suite skipped."),
+        "trace": f"HTTP checks exhausted after {os.environ['MAX_ACCESS_RETRIES']} attempts."
+    },
+    "stage": "finished",
+    "labels": [
+        {"name": "feature", "value": "playwright-smoke"},
+        {"name": "suite", "value": "ci"}
+    ],
+    "parameters": [
+        {"name": "baseURL", "value": os.environ["APP_URL"]},
+        {"name": "ci-mode", "value": os.environ["CI_MODE"]}
+    ],
+    "start": timestamp,
+    "stop": timestamp
+}
+
+output_dir = pathlib.Path(os.environ["ALLURE_RESULTS_DIR"])
+output_dir.mkdir(parents=True, exist_ok=True)
+dest = output_dir / f"playwright-skip-{timestamp}.json"
+with dest.open("w", encoding="utf-8") as fh:
+    json.dump(payload, fh, indent=2)
+print(f"[allure-skip] wrote {dest}")
+PYCODE
 }
 
 ensure_html_placeholder() {
@@ -143,11 +187,21 @@ EOF
   fi
 }
 
+ensure_allure_placeholder() {
+  if ! find "${ALLURE_RESULTS_DIR}" -maxdepth 1 -type f -print -quit >/dev/null; then
+    cat <<'EOF' > "${ALLURE_RESULTS_DIR}/ALLURE_RESULTS_PLACEHOLDER.txt"
+No Allure result files or skip markers were produced. Ensure the Playwright Allure reporter
+is enabled and that either tests run to completion or the skip helper executes.
+EOF
+  fi
+}
+
 finalise_artifacts() {
   local exit_code="$1"
   write_summary "${exit_code}"
   ensure_html_placeholder
   ensure_results_placeholder
+  ensure_allure_placeholder
 }
 
 #------------------------------------------------------------------------------
@@ -272,6 +326,8 @@ main() {
   if ! check_application_access; then
     log_warn "Generating skipped-test artifact bundle."
     write_skipped_report
+    write_allure_skip_result "Application ${APP_URL} unreachable from CI runner after ${MAX_ACCESS_RETRIES} attempts."
+    log_info "Allure skip artifact stored in ${ALLURE_RESULTS_DIR}"
     finalise_artifacts "${EXIT_ACCESS}"
     exit "${EXIT_ACCESS}"
   fi

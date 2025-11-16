@@ -183,7 +183,7 @@ jobs:
           if [ -d "allure-results" ] && [ "$(ls -A allure-results)" ]; then
             echo "📤 Uploading results to Allure Dashboard..."
             chmod +x scripts/upload-allure-results.sh
-            ALLURE_SERVER_URL=https://allure.local \
+            ALLURE_SERVER_URL=http://allure.allure.svc.cluster.local:5050 \
             ALLURE_PROJECT_ID=fm-compta-consulting \
             bash scripts/upload-allure-results.sh
           else
@@ -304,6 +304,25 @@ jobs:
           path: zap-report.html
           retention-days: 30
           if-no-files-found: ignore
+
+      - name: Publish ZAP results to Allure Dashboard
+        if: always()
+        continue-on-error: true
+        run: |
+          chmod +x \
+            devops/owasp/generate-zap-allure-results.sh \
+            application/fm-compta-consulting-frontend/scripts/upload-allure-results.sh
+
+          RESULT_DIR=$(mktemp -d)
+          SCAN_TARGET=https://fm-compta-consulting.local \
+          ZAP_REPORT_FILE="$GITHUB_WORKSPACE/zap-report.html" \
+          ALLURE_RESULTS_DIR="$RESULT_DIR" \
+          bash devops/owasp/generate-zap-allure-results.sh
+
+          ALLURE_SERVER_URL=http://allure.allure.svc.cluster.local:5050 \
+          ALLURE_PROJECT_ID=owasp-zap \
+          ALLURE_RESULTS_DIR="$RESULT_DIR" \
+          bash application/fm-compta-consulting-frontend/scripts/upload-allure-results.sh
 
   update-manifests:
     needs:

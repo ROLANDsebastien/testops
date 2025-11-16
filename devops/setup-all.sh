@@ -63,6 +63,7 @@ echo ""
 echo "--> Installing Allure Dashboard for test reporting..."
 kubectl apply -f ./allure/namespace.yaml
 kubectl apply -f ./allure/pvc.yaml
+kubectl apply -f ./allure/init-configmap.yaml
 kubectl apply -f ./allure/deployment.yaml
 kubectl apply -f ./allure/service.yaml
 

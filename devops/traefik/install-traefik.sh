@@ -5,13 +5,19 @@ echo "Configuring K3s native Traefik with Gateway API support..."
 
 # Install Gateway API CRDs
 echo "Installing Gateway API CRDs..."
-kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.1.0/standard-install.yaml > /dev/null 2>&1
+kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.1.0/standard-install.yaml
 
 echo "Waiting for Gateway API CRDs to be established..."
 kubectl wait --for condition=established --timeout=60s crd/gateways.gateway.networking.k8s.io
 kubectl wait --for condition=established --timeout=60s crd/httproutes.gateway.networking.k8s.io
 
 # K3s installs Traefik in kube-system namespace by default
+echo "Waiting for K3s native Traefik pods to appear..."
+until kubectl get pods -n kube-system -l app.kubernetes.io/name=traefik 2>/dev/null | grep -q traefik; do
+  echo "Traefik pod not found yet, retrying in 5s..."
+  sleep 5
+done
+
 echo "Waiting for K3s native Traefik to be ready..."
 kubectl wait --namespace kube-system \
   --for=condition=ready pod \

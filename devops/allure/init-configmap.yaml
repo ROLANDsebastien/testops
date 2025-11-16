@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: allure-init-script
+  namespace: allure
+data:
+  init-project.sh: |
+    #!/bin/bash
+    set -e
+
+    PROJECT_ID="${PROJECT_ID:-fm-compta-consulting}"
+    PROJECT_DIR="/app/allure-docker-api/static/projects/${PROJECT_ID}"
+    RESULTS_DIR="${PROJECT_DIR}/results"
+
+    echo "[INFO] Initializing Allure project: ${PROJECT_ID}"
+
+    if [ -d "${PROJECT_DIR}" ]; then
+        echo "[INFO] Project directory already exists: ${PROJECT_DIR}"
+    else
+        echo "[INFO] Creating project directory: ${PROJECT_DIR}"
+        mkdir -p "${RESULTS_DIR}"
+        mkdir -p "${PROJECT_DIR}/reports"
+        chmod -R 755 "${PROJECT_DIR}"
+        echo "# Placeholder" > "${RESULTS_DIR}/.gitkeep"
+        echo "[SUCCESS] Project '${PROJECT_ID}' created successfully"
+    fi
+
+    echo "[INFO] Project initialization complete"
+    exit 0

@@ -13,6 +13,23 @@ spec:
       labels:
         app: allure
     spec:
+      initContainers:
+        - name: init-project
+          image: frankescobar/allure-docker-service:2.27.0-arm64v8
+          command: ["/bin/bash", "/scripts/init-project.sh"]
+          env:
+            - name: PROJECT_ID
+              value: "fm-compta-consulting"
+            - name: ALLURE_API_URL
+              value: "http://localhost:5050"
+          volumeMounts:
+            - name: allure-results
+              mountPath: /app/allure-results
+            - name: init-scripts
+              mountPath: /scripts
+          securityContext:
+            runAsUser: 0
+            runAsGroup: 0
       containers:
         - name: allure
           image: frankescobar/allure-docker-service:2.27.0-arm64v8
@@ -50,3 +67,7 @@ spec:
             claimName: allure-results-pvc
         - name: allure-reports
           emptyDir: {}
+        - name: init-scripts
+          configMap:
+            name: allure-init-script
+            defaultMode: 0755

@@ -10,4 +10,8 @@ spec:
     - protocol: TCP
       port: 5050
       targetPort: 5050
+      name: api
+    - port: 5252
+      targetPort: 5252
+      name: web-ui
   type: ClusterIP

@@ -7,10 +7,15 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`allure.local`)
+    - match: Host(`allure.local`) && PathPrefix(`/allure-docker-service`)
       kind: Rule
       services:
         - name: allure
           port: 5050
+    - match: Host(`allure.local`)
+      kind: Rule
+      services:
+        - name: allure
+          port: 5252
   tls:
     secretName: allure-tls-secret

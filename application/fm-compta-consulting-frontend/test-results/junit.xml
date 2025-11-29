@@ -1,0 +1,212 @@
+<testsuites id="" name="" tests="48" failures="0" skipped="48" errors="0" time="0.06433100000000001">
+<testsuite name="appointment.spec.ts" timestamp="2025-11-29T19:11:28.129Z" hostname="chromium" tests="6" failures="0" skipped="6" time="0" errors="0">
+<testcase name="Appointment Tests › should show appointment page requires authentication" classname="appointment.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Appointment Tests › should access appointment page after login" classname="appointment.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Appointment Tests › should display appointment booking form elements" classname="appointment.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Appointment Tests › should show appointment list page" classname="appointment.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Appointment Tests › should handle appointment navigation without breaking" classname="appointment.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Appointment Tests › should validate appointment form requires authentication" classname="appointment.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="auth.spec.ts" timestamp="2025-11-29T19:11:28.129Z" hostname="chromium" tests="4" failures="0" skipped="4" time="0" errors="0">
+<testcase name="Authentication Tests › should allow user to register through modal" classname="auth.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Authentication Tests › should allow user to login through modal" classname="auth.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Authentication Tests › should switch between login and register modals" classname="auth.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Authentication Tests › should show validation error for password mismatch" classname="auth.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="home-page.spec.ts" timestamp="2025-11-29T19:11:28.129Z" hostname="chromium" tests="6" failures="0" skipped="6" time="0" errors="0">
+<testcase name="FM Compta Consulting Application › should display the homepage" classname="home-page.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="FM Compta Consulting Application › should open login modal" classname="home-page.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="FM Compta Consulting Application › should open registration modal" classname="home-page.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="FM Compta Consulting Application › should redirect to home when accessing appointment page without auth" classname="home-page.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="FM Compta Consulting Application › should redirect to home when accessing admin page without auth" classname="home-page.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="FM Compta Consulting Application › should display CTA button for appointment" classname="home-page.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="appointment.spec.ts" timestamp="2025-11-29T19:11:28.129Z" hostname="firefox" tests="6" failures="0" skipped="6" time="0" errors="0">
+<testcase name="Appointment Tests › should show appointment page requires authentication" classname="appointment.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Appointment Tests › should access appointment page after login" classname="appointment.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Appointment Tests › should display appointment booking form elements" classname="appointment.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Appointment Tests › should show appointment list page" classname="appointment.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Appointment Tests › should handle appointment navigation without breaking" classname="appointment.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Appointment Tests › should validate appointment form requires authentication" classname="appointment.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="auth.spec.ts" timestamp="2025-11-29T19:11:28.129Z" hostname="firefox" tests="4" failures="0" skipped="4" time="0" errors="0">
+<testcase name="Authentication Tests › should allow user to register through modal" classname="auth.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Authentication Tests › should allow user to login through modal" classname="auth.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Authentication Tests › should switch between login and register modals" classname="auth.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Authentication Tests › should show validation error for password mismatch" classname="auth.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="home-page.spec.ts" timestamp="2025-11-29T19:11:28.129Z" hostname="firefox" tests="6" failures="0" skipped="6" time="0" errors="0">
+<testcase name="FM Compta Consulting Application › should display the homepage" classname="home-page.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="FM Compta Consulting Application › should open login modal" classname="home-page.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="FM Compta Consulting Application › should open registration modal" classname="home-page.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="FM Compta Consulting Application › should redirect to home when accessing appointment page without auth" classname="home-page.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="FM Compta Consulting Application › should redirect to home when accessing admin page without auth" classname="home-page.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="FM Compta Consulting Application › should display CTA button for appointment" classname="home-page.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="appointment.spec.ts" timestamp="2025-11-29T19:11:28.129Z" hostname="webkit" tests="6" failures="0" skipped="6" time="0" errors="0">
+<testcase name="Appointment Tests › should show appointment page requires authentication" classname="appointment.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Appointment Tests › should access appointment page after login" classname="appointment.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Appointment Tests › should display appointment booking form elements" classname="appointment.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Appointment Tests › should show appointment list page" classname="appointment.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Appointment Tests › should handle appointment navigation without breaking" classname="appointment.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Appointment Tests › should validate appointment form requires authentication" classname="appointment.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="auth.spec.ts" timestamp="2025-11-29T19:11:28.129Z" hostname="webkit" tests="4" failures="0" skipped="4" time="0" errors="0">
+<testcase name="Authentication Tests › should allow user to register through modal" classname="auth.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Authentication Tests › should allow user to login through modal" classname="auth.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Authentication Tests › should switch between login and register modals" classname="auth.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="Authentication Tests › should show validation error for password mismatch" classname="auth.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="home-page.spec.ts" timestamp="2025-11-29T19:11:28.129Z" hostname="webkit" tests="6" failures="0" skipped="6" time="0" errors="0">
+<testcase name="FM Compta Consulting Application › should display the homepage" classname="home-page.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="FM Compta Consulting Application › should open login modal" classname="home-page.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="FM Compta Consulting Application › should open registration modal" classname="home-page.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="FM Compta Consulting Application › should redirect to home when accessing appointment page without auth" classname="home-page.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="FM Compta Consulting Application › should redirect to home when accessing admin page without auth" classname="home-page.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+<testcase name="FM Compta Consulting Application › should display CTA button for appointment" classname="home-page.spec.ts" time="0">
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+</testsuites>

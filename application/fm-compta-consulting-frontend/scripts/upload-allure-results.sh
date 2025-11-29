@@ -100,7 +100,11 @@ if [ "$HTTP_CODE" -eq 200 ] || [ "$HTTP_CODE" -eq 201 ]; then
 
     if [ "$GEN_HTTP_CODE" -eq 200 ]; then
         log_success "Report generated successfully"
-        log_info "View report at: ${ALLURE_SERVER}/allure-docker-service/projects/${PROJECT_ID}/reports/latest/index.html"
+        REPORT_URL="${ALLURE_SERVER}/allure-docker-service/projects/${PROJECT_ID}/reports/latest/index.html"
+        log_info "View report at: ${REPORT_URL}"
+        
+        # Print for CI visibility
+        echo "::notice title=Allure Report::View the test report at ${REPORT_URL}"
     else
         log_warn "Report generation returned HTTP $GEN_HTTP_CODE"
     fi

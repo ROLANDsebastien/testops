@@ -118,13 +118,9 @@ echo "GitHub Actions Runner Controller installation complete."
 echo ""
 echo "--> Applying Runner Deployment configuration..."
 
-# Get the Ingress IP to inject into the runner's host aliases
-INGRESS_IP=$(multipass info k3s-worker1 --format json | jq -r ".info[\"k3s-worker1\"].ipv4[0]")
-
-# Replace the placeholder in the runner deployment manifest
-sed -i '' "s|__INGRESS_IP__|${INGRESS_IP}|" ./actions-runner-controller/runner-deployment.yaml
-
-kubectl apply -f ./actions-runner-controller/runner-deployment.yaml
+echo ""
+echo "--> Redeploying GitHub Actions runner with current Ingress IP..."
+./actions-runner-controller/redeploy-runner.sh
 
 # --- APPLY CONFIGS ---
 echo ""

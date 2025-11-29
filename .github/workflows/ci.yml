@@ -89,24 +89,7 @@ jobs:
           ls -la $PLAYWRIGHT_BROWSERS_PATH || echo "Browser path not found"
           npx playwright install --help | grep -A 2 "browsers"
 
-      - name: Check application accessibility
-        id: check_app
-        continue-on-error: true
-        run: |
-          echo "Checking application accessibility..."
-          HTTP_CODE=$(curl -k -s -o /dev/null -w "%{http_code}" https://fm-compta-consulting.local)
-          echo "HTTP response code: $HTTP_CODE"
-
-          if echo "$HTTP_CODE" | grep -q "200\|301\|302"; then
-            echo "✅ Application is accessible"
-            echo "accessible=true" >> $GITHUB_OUTPUT
-          else
-            echo "❌ Application not accessible (HTTP $HTTP_CODE)"
-            echo "accessible=false" >> $GITHUB_OUTPUT
-          fi
-
       - name: Run Playwright tests
-        if: steps.check_app.outputs.accessible == 'true'
         continue-on-error: true
         env:
           PLAYWRIGHT_BASE_URL: https://fm-compta-consulting.local
@@ -127,25 +110,6 @@ jobs:
           </body></html>
           EOFHTML
           fi
-
-      - name: Skip Playwright tests (create placeholder)
-        if: steps.check_app.outputs.accessible != 'true'
-        run: |
-          echo "⚠️ Skipping Playwright tests - application not accessible"
-          echo "Tests require the application to be deployed and running"
-
-          cd application/fm-compta-consulting-frontend
-          mkdir -p playwright-report
-          echo '<!DOCTYPE html>' > playwright-report/SKIPPED.html
-          echo '<html>' >> playwright-report/SKIPPED.html
-          echo '<head><title>Tests Skipped</title></head>' >> playwright-report/SKIPPED.html
-          echo '<body style="font-family: Arial; margin: 40px;">' >> playwright-report/SKIPPED.html
-          echo '  <h1>⚠️ Tests Skipped</h1>' >> playwright-report/SKIPPED.html
-          echo '  <p><strong>Reason:</strong> Application was not accessible at check time</p>' >> playwright-report/SKIPPED.html
-          echo '  <p><strong>URL tested:</strong> https://fm-compta-consulting.local</p>' >> playwright-report/SKIPPED.html
-          echo '  <p>The application must be running before tests can execute.</p>' >> playwright-report/SKIPPED.html
-          echo '</body>' >> playwright-report/SKIPPED.html
-          echo '</html>' >> playwright-report/SKIPPED.html
 
       - name: Upload Playwright HTML report
         if: always()
@@ -183,7 +147,9 @@ jobs:
           if [ -d "allure-results" ] && [ "$(ls -A allure-results)" ]; then
             echo "📤 Uploading results to Allure Dashboard..."
             chmod +x scripts/upload-allure-results.sh
-            ALLURE_SERVER_URL=http://allure.allure.svc.cluster.local:5050 \
+            
+            # Use the Ingress URL which is accessible from the runner
+            ALLURE_SERVER_URL=https://allure.local \
             ALLURE_PROJECT_ID=fm-compta-consulting \
             bash scripts/upload-allure-results.sh
           else
@@ -193,35 +159,47 @@ jobs:
   run-sonarqube-analysis:
     needs: build-and-push-images
     runs-on: self-hosted
-    timeout-minutes: 15
+    timeout-minutes: 20
     continue-on-error: true
-    if: false
+    env:
+      SONAR_HOST_URL: https://sonarqube.local
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Setup Node.js
+      - name: Setup Java for SonarQube
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Setup Node.js for SonarQube
         uses: actions/setup-node@v4
         with:
           node-version: "20"
 
-      - name: SonarQube Scan - Frontend
-        continue-on-error: true
-        env:
-          SONAR_HOST_URL: https://sonarqube.local
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: Install frontend dependencies
         run: |
-          echo "SonarQube scan temporarily disabled"
+          cd application/fm-compta-consulting-frontend
+          npm ci
+
+      - name: Install backend dependencies
+        run: |
+          cd application/fm-compta-consulting-backend
+          npm ci
+
+      - name: SonarQube Scan - Frontend
+        uses: sonarsource/sonarqube-scan-action@v2
+        with:
+          projectBaseDir: application/fm-compta-consulting-frontend
 
       - name: SonarQube Scan - Backend
-        continue-on-error: true
-        env:
-          SONAR_HOST_URL: https://sonarqube.local
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          echo "SonarQube scan temporarily disabled"
+        uses: sonarsource/sonarqube-scan-action@v2
+        with:
+          projectBaseDir: application/fm-compta-consulting-backend
 
   run-owasp-zap-scan:
     needs: build-and-push-images
@@ -319,7 +297,7 @@ jobs:
           ALLURE_RESULTS_DIR="$RESULT_DIR" \
           bash devops/owasp/generate-zap-allure-results.sh
 
-          ALLURE_SERVER_URL=http://allure.allure.svc.cluster.local:5050 \
+          ALLURE_SERVER_URL=https://allure.local \
           ALLURE_PROJECT_ID=owasp-zap \
           ALLURE_RESULTS_DIR="$RESULT_DIR" \
           bash application/fm-compta-consulting-frontend/scripts/upload-allure-results.sh

@@ -20,7 +20,7 @@ spec:
         - linux
         - x64
       hostAliases:
-        - ip: "192.168.2.3"
+        - ip: "__INGRESS_IP__"
           hostnames:
             - registry.local
             - registry-ui.local
@@ -32,6 +32,8 @@ spec:
             - fm-compta-consulting.local
             - sonarqube.local
             - allure.local
+            - zap.local
+            - traefik.local
       image: summerwind/actions-runner-dind:ubuntu-22.04
       dockerRegistryMirror: ""
       dockerdContainerResources:

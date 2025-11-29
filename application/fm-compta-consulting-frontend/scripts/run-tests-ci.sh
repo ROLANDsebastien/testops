@@ -306,6 +306,18 @@ run_playwright_suite() {
   else
     log_warn "Playwright suite exited with status ${exit_code}."
   fi
+
+  # Verify Allure results generation
+  if [ -d "${ALLURE_RESULTS_DIR}" ]; then
+    local count=$(find "${ALLURE_RESULTS_DIR}" -type f | wc -l)
+    log_info "Generated ${count} files in ${ALLURE_RESULTS_DIR}"
+    if (( count == 0 )); then
+      log_warn "No Allure results found! Check playwright.config.ts reporter settings."
+    fi
+  else
+    log_error "Allure results directory missing: ${ALLURE_RESULTS_DIR}"
+  fi
+
   return "${exit_code}"
 }
 

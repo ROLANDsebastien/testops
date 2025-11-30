@@ -15,7 +15,7 @@ spec:
     spec:
       initContainers:
         - name: init-project
-          image: frankescobar/allure-docker-service:2.27.0-arm64v8
+          image: frankescobar/allure-docker-service:beta
           command: ["/bin/bash", "/scripts/init-project.sh"]
           env:
             - name: PROJECT_ID
@@ -32,7 +32,7 @@ spec:
             runAsGroup: 0
       containers:
         - name: allure
-          image: frankescobar/allure-docker-service:2.27.0-arm64v8
+          image: frankescobar/allure-docker-service:beta
           ports:
             - containerPort: 5050
           env:
@@ -62,7 +62,7 @@ spec:
             allowPrivilegeEscalation: false
             readOnlyRootFilesystem: false
         - name: allure-ui
-          image: frankescobar/allure-docker-service-ui:2.27.0-arm64v8
+          image: frankescobar/allure-docker-service-ui:beta
           ports:
             - containerPort: 5252
           env:

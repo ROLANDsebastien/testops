@@ -197,15 +197,32 @@ jobs:
           name: playwright-test-results
           path: application/fm-compta-consulting-frontend/test-results
 
+      - name: Install Sonar Scanner
+        run: npm install -g sonarqube-scanner
+
       - name: SonarQube Scan - Frontend
-        uses: sonarsource/sonarqube-scan-action@v2
-        with:
-          projectBaseDir: application/fm-compta-consulting-frontend
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: https://sonarqube.local
+        run: |
+          cd application/fm-compta-consulting-frontend
+          sonar-scanner \
+            -Dsonar.projectKey=fm-compta-consulting-frontend \
+            -Dsonar.sources=src \
+            -Dsonar.host.url=$SONAR_HOST_URL \
+            -Dsonar.login=$SONAR_TOKEN
 
       - name: SonarQube Scan - Backend
-        uses: sonarsource/sonarqube-scan-action@v2
-        with:
-          projectBaseDir: application/fm-compta-consulting-backend
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: https://sonarqube.local
+        run: |
+          cd application/fm-compta-consulting-backend
+          sonar-scanner \
+            -Dsonar.projectKey=fm-compta-consulting-backend \
+            -Dsonar.sources=src \
+            -Dsonar.host.url=$SONAR_HOST_URL \
+            -Dsonar.login=$SONAR_TOKEN
 
   run-owasp-zap-scan:
     needs: build-and-push-images

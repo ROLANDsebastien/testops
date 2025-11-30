@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: ghcr.io/rolandsebastien/fm-compta-consulting-backend:46e66091e49ee7436a0198d0c8adaeb22a4e5995
+          image: ghcr.io/rolandsebastien/fm-compta-consulting-backend:bdf81db7c17d15b076b3b73fff720603fd7a8a33
           ports:
             - containerPort: 3001
           env:

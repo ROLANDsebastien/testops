@@ -191,6 +191,12 @@ jobs:
           cd application/fm-compta-consulting-backend
           npm ci
 
+      - name: Download Playwright Test Results
+        uses: actions/download-artifact@v4
+        with:
+          name: playwright-test-results
+          path: application/fm-compta-consulting-frontend/test-results
+
       - name: SonarQube Scan - Frontend
         uses: sonarsource/sonarqube-scan-action@v2
         with:

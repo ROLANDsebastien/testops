@@ -7,11 +7,16 @@ spec:
   entryPoints:
     - websecure
   routes:
-    - match: Host(`allure.local`) && PathPrefix(`/allure-docker-service`)
+    - match: Host(`allure.local`) && (PathPrefix(`/allure-docker-service/send-results`) || PathPrefix(`/allure-docker-service/generate-report`) || PathPrefix(`/allure-docker-service/clean-results`) || PathPrefix(`/allure-docker-service/clean-history`))
       kind: Rule
       services:
         - name: allure
           port: 5050
+    - match: Host(`allure.local`) && PathPrefix(`/allure-docker-service`)
+      kind: Rule
+      services:
+        - name: allure
+          port: 5252
     - match: Host(`allure.local`)
       kind: Rule
       services:
